@@ -1,0 +1,249 @@
+/* ВС-Логистика — логика главной страницы.
+   Состояние и расчёт вызова — класс Component (ниже), без фреймворков.
+   Разметка связана через data-атрибуты:
+     data-action="путь"     — клик вызывает функцию из renderVals()
+     data-on-input="путь"   — ввод в поле
+     data-bind="путь"       — текст элемента
+     data-bind-attr='{…}'   — атрибуты (value, disabled…)
+     data-bind-style='{…}'  — динамические стили
+     data-if="путь"         — показать / скрыть блок */
+(function () {
+'use strict';
+class DCLogic {
+  constructor() { this.props = {}; this.state = {}; }
+  setState(p) { const patch = typeof p === 'function' ? p(this.state) : p; this.state = Object.assign({}, this.state, patch); schedule(); }
+  forceUpdate() { schedule(); }
+}
+
+const SIT = [
+  { id: 'start', t: 'Не заводится', sub: 'Аккумулятор, стартер, электрика', tech: 'Платформа' },
+  { id: 'dtp', t: 'ДТП', sub: 'Заберём, даже если не катится', tech: 'Платформа или тележки' },
+  { id: 'blocked', t: 'Колёса заблокированы', sub: 'Колёса, руль или КПП', tech: 'Подкатные тележки' },
+  { id: 'ditch', t: 'Машина в кювете', sub: 'Съехала с дороги, снег, грязь', tech: 'Манипулятор' },
+  { id: 'flip', t: 'Перевёрнута или сильно повреждена', sub: 'На боку, на крыше, без колеса', tech: 'Манипулятор' },
+  { id: 'low', t: 'Низкий клиренс', sub: 'Обвес, заниженная подвеска', tech: 'Платформа, пологий заезд' },
+  { id: 'move', t: 'Нужна перевозка', sub: 'Исправное авто к удобному времени', tech: 'Платформа' },
+  { id: 'other', t: 'Другое', sub: 'Опишите — диспетчер подскажет', tech: 'Подберём' }
+];
+const VEH = [
+  { id: 'car', t: 'Легковой' }, { id: 'suv', t: 'Кроссовер / SUV' }, { id: 'van', t: 'Микроавтобус' },
+  { id: 'truck', t: 'Грузовой' }, { id: 'moto', t: 'Мотоцикл' }
+];
+const TO = [
+  { id: 'sto', t: 'На СТО или в сервис', sub: 'Назовите сервис — найдём адрес' },
+  { id: 'home', t: 'Домой или на стоянку', sub: '' },
+  { id: 'unknown', t: 'Пока не знаю', sub: 'Решим вместе с диспетчером' }
+];
+const DISTRICTS = [
+  ['Приморский', 'primorskiy', '20–30'], ['Красносельский', 'krasnoselskiy', '25–35'], ['Московский', 'moskovskiy', '20–30'],
+  ['Выборгский', 'vyborgskiy', '20–35'], ['Невский', 'nevskiy', '20–30'], ['Калининский', 'kalininskiy', '20–30'],
+  ['Василеостровский', 'vasileostrovskiy', '20–30'], ['Петроградский', 'petrogradskiy', '20–30'], ['Центральный', 'centralnyy', '25–40'],
+  ['Адмиралтейский', 'admiralteyskiy', '25–35'], ['Кировский', 'kirovskiy', '20–30'], ['Фрунзенский', 'frunzenskiy', '20–30']
+];
+const KEY = 'vsl-calc-v3';
+const CASES = [
+  { id: 'case-1', district: 'Петроградский → Выборгский', car: 'Toyota Camry', what: 'Не завелась во дворе, заблокирована АКПП — колёса не крутятся', a: 'Большой пр. П.С., 58', b: 'СТО, Лесной пр.', km: '4 км', tech: 'Платформа + тележки', eta: '27 мин', cost: '4 800 ₽' },
+  { id: 'case-2', district: 'КАД · Выборгский', car: 'Kia Sportage', what: 'ДТП на КАД, повреждено переднее колесо', a: 'КАД, съезд на Выборгское ш.', b: 'Стоянка, Парголово', km: '9 км', tech: 'Платформа + тележки', eta: '34 мин', cost: 'демо ₽' },
+  { id: 'case-3', district: 'Всеволожский р-н', car: 'Lada Vesta', what: 'Съехала в кювет на трассе', a: 'Дорога жизни, 18 км', b: 'Кудрово, СТО', km: '21 км', tech: 'Манипулятор', eta: '38 мин', cost: 'демо ₽' }
+];
+const MINI = (() => {
+  const z = 14, n = Math.pow(2, z);
+  const tx = lon => (lon + 180) / 360 * n;
+  const ty = lat => { const r = lat * Math.PI / 180; return (1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * n; };
+  const A = [59.9660, 30.3110], B = [59.9790, 30.3440];
+  const ax = tx(A[1]), ay = ty(A[0]), bx = tx(B[1]), by = ty(B[0]);
+  const mx = (ax + bx) / 2, my = (ay + by) / 2, ox = Math.floor(mx) - 2, oy = Math.floor(my) - 2;
+  const P = (x, y) => [Math.round((x - ox) * 256), Math.round((y - oy) * 256)];
+  const [pax, pay] = P(ax, ay), [pbx, pby] = P(bx, by), [pmx, pmy] = P(mx, my);
+  const cx = pmx - (pby - pay) * 0.25, cy = pmy + (pbx - pax) * 0.25;
+  const tiles = [];
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) tiles.push({ bg: 'url(https://tile.openstreetmap.org/' + z + '/' + (ox + c) + '/' + (oy + r) + '.png)' });
+  return { tiles, left: 'calc(50% - ' + pmx + 'px)', top: 'calc(50% - ' + pmy + 'px)', path: 'M' + pax + ' ' + pay + ' Q' + Math.round(cx) + ' ' + Math.round(cy) + ' ' + pbx + ' ' + pby, ax: pax, ay: pay, bx0: pbx - 7, by0: pby - 7 };
+})();
+const sel = on => ({ bd: on ? '#2350E6' : '#E3E6EB', bg: on ? '#EAF0FF' : '#fff' });
+
+class Component extends DCLogic {
+  state = { w: typeof window !== 'undefined' ? window.innerWidth : 1440, step: 1, from: '', to: '', toKind: '', sit: '', sitPre: false, veh: '', q1: '', q2: '', phone: '', comment: '', showComment: false, sent: false, phoneErr: false, locating: false, locErr: false };
+
+  componentDidMount() {
+    try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s) this.setState(s); } catch (e) {}
+    this.onResize = () => this.setState({ w: window.innerWidth });
+    this.setState({ w: window.innerWidth });
+    requestAnimationFrame(() => this.setState({ w: window.innerWidth }));
+    window.addEventListener('load', this.onResize);
+    if (window.ResizeObserver) { this.ro = new ResizeObserver(() => { if (window.innerWidth !== this.state.w) this.setState({ w: window.innerWidth }); }); this.ro.observe(document.documentElement); }
+    window.addEventListener('resize', this.onResize);
+    this.onMsg = e => { const m = e.data || {}; if (m.type !== 'vsl-map' || m.action !== 'call') return; this.setState({ from: m.district ? m.district + ' район, ' : this.state.from, step: 1 }); this.scrollTo('calc'); };
+    window.addEventListener('message', this.onMsg);
+  }
+  componentWillUnmount() { window.removeEventListener('resize', this.onResize); window.removeEventListener('message', this.onMsg); window.removeEventListener('load', this.onResize); if (this.ro) this.ro.disconnect(); }
+  componentDidUpdate() {
+    const { step, from, to, toKind, sit, sitPre, veh, q1, q2, phone, comment } = this.state;
+    try { localStorage.setItem(KEY, JSON.stringify({ step, from, to, toKind, sit, sitPre, veh, q1, q2, phone, comment })); } catch (e) {}
+  }
+  scrollTo(id) {
+    const el = document.getElementById(id);
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 84, behavior: 'smooth' });
+  }
+  locate = () => {
+    if (!navigator.geolocation) return this.setState({ locErr: true });
+    this.setState({ locating: true, locErr: false });
+    navigator.geolocation.getCurrentPosition(
+      p => { this.setState({ locating: false, from: 'Моё местоположение · ' + p.coords.latitude.toFixed(4) + ', ' + p.coords.longitude.toFixed(4) }); document.querySelectorAll('iframe[data-map]').forEach(f => { try { f.contentWindow.postMessage({ type: 'vsl-locate', lat: p.coords.latitude, lon: p.coords.longitude }, '*'); } catch (e) {} }); },
+      () => this.setState({ locating: false, locErr: true }),
+      { timeout: 8000, maximumAge: 60000 }
+    );
+  };
+  eta() {
+    const f = this.state.from.toLowerCase();
+    if (this.state.sit === 'move') return 'к согласованному времени';
+    if (/кад|зсд|трасс|м-1|ленобласт|гатчин|всеволож|мурино|кудрово|колпин|пушкин/.test(f)) return '≈30–40 мин';
+    return '≈20–40 мин';
+  }
+  result() {
+    const { sit, veh, q1, q2 } = this.state;
+    const s = SIT.find(x => x.id === sit) || SIT[7];
+    const v = VEH.find(x => x.id === veh);
+    let tech = 'Сдвижная платформа', why = 'Автомобиль заезжает или затягивается лебёдкой на платформу. Подходит для большинства легковых машин.';
+    if (veh === 'truck') { tech = 'Грузовой эвакуатор'; why = 'Для грузового транспорта нужен эвакуатор большей грузоподъёмности — диспетчер уточнит массу и габариты.'; }
+    else if (sit === 'ditch' || sit === 'flip') { tech = 'Манипулятор'; why = 'Стрела поднимает автомобиль и ставит на платформу без протаскивания — так не добавится новых повреждений.'; }
+    else if (sit === 'blocked' || q1 === 'Нет' || q2 === 'Да') { tech = 'Платформа + подкатные тележки'; why = 'Тележки ставятся под заблокированные колёса, и машину можно закатить на платформу без волочения.'; }
+    else if (sit === 'low') { tech = 'Платформа с пологим заездом'; why = 'Низкий угол погрузки и мягкие крепления за колёса — без касания бампера и обвеса.'; }
+    else if (veh === 'moto') { tech = 'Платформа с креплением для мото'; why = 'Мотоцикл фиксируется в стойке и ремнями за раму.'; }
+    else if (sit === 'other') { tech = 'Подберём по описанию'; why = 'Позвоните или оставьте номер — диспетчер задаст пару вопросов и назовёт подходящую технику.'; }
+    const eta = (sit === 'ditch' || sit === 'flip') ? '≈30–40 мин' : this.eta();
+    return { tech, why, eta, summary: s.t + (v ? ' · ' + v.t : '') };
+  }
+  renderVals() {
+    const st = this.state;
+    const mobile = st.w < 820;
+    const go = id => () => this.scrollTo(id);
+    const set = patch => () => this.setState(patch);
+    const needQ1 = ['dtp', 'blocked', 'flip', 'other'].includes(st.sit);
+    const needQ2 = ['dtp', 'blocked'].includes(st.sit);
+    const opt3 = (key) => ['Да', 'Нет', 'Не знаю'].map(t => ({ t, ...sel(st[key] === t), pick: set({ [key]: t }) }));
+    return {
+      mobile, desktop: !mobile, wideNav: st.w >= 1220, padBottom: mobile ? '88px' : '0px',
+      heroCols: st.w < 1120 ? 'minmax(0,1fr)' : 'minmax(0,45fr) minmax(0,55fr)',
+      heroMinH: st.w < 1120 ? '0px' : 'clamp(720px,calc(100vh - 72px),900px)',
+      heroGridPadL: st.w < 1120 ? '0px' : 'max(clamp(16px,3.4vw,56px), calc((100% - 1680px) / 2 + 56px))',
+      heroColPadL: st.w < 1120 ? 'clamp(16px,3.4vw,56px)' : '0px',
+      heroMapH: st.w < 1120 ? '520px' : '720px',
+      sitMin: mobile ? '150px' : 'min(100%,280px)', sitH: mobile ? '118px' : '176px',
+      from: st.from, to: st.to, phone: st.phone,
+      onFrom: e => this.setState({ from: e.target.value }),
+      onTo: e => this.setState({ to: e.target.value, toKind: '' }),
+      onPhone: e => this.setState({ phone: e.target.value }),
+      onLocate: this.locate,
+      locateLabel: st.locating ? 'Определяем…' : st.locErr ? 'Не получилось — введите адрес' : 'Определить, где я',
+      heroCall: () => { this.setState({ step: st.from.trim() ? 2 : 1, sent: false }); this.scrollTo('calc'); },
+      comment: st.comment, onComment: e => this.setState({ comment: e.target.value }),
+      showComment: st.showComment, noComment: !st.showComment, toggleComment: set({ showComment: true }),
+      phoneErr: st.phoneErr, phoneBd: st.phoneErr ? '#C8342B' : '#CDD3DC',
+      showSitChip: !!st.sit && st.sitPre && st.step >= 1 && st.step <= 4, sitLabel: (SIT.find(x => x.id === st.sit) || {}).t || '',
+      changeSit: set({ step: 3, sitPre: false }),
+      receipt: [
+        { t: 'Подача', d: 'выезд экипажа к автомобилю', v: '1 500 ₽' },
+        { t: 'Маршрут', d: '14 км по городу', v: '1 400 ₽' },
+        { t: 'Погрузка', d: 'заблокирована АКПП', v: '1 000 ₽' },
+        { t: 'Доп. оборудование', d: 'подкатные тележки', v: '900 ₽' }
+      ],
+      goCalc: go('calc'), goCall: go('call'),
+      districts: DISTRICTS.map(([name, slug, eta]) => ({ name, url: '/evakuator-' + slug + '-rayon/', eta: eta + ' мин' })),
+      situations: SIT.map(s => ({ ...s, pick: () => { this.setState({ sit: s.id, sitPre: true, q1: '', q2: '', step: st.from.trim() ? 2 : 1, sent: false }); this.scrollTo('calc'); } })),
+      s1: st.step === 1, s2: st.step === 2, s3: st.step === 3, s4: st.step === 4, s5: st.step === 5,
+      canBack: st.step > 1, back: () => this.setState({ step: st.step === 4 && st.sit && st.sitPre ? 2 : Math.max(1, st.step - 1), sent: false }),
+      stepLabel: st.step < 5 ? 'Шаг ' + st.step + ' из 4' : 'Результат',
+      progress: [1, 2, 3, 4].map(i => ({ c: i <= st.step ? '#2350E6' : '#E3E6EB' })),
+      next: () => this.setState({ step: Math.min(5, st.step + (st.step === 2 && st.sit ? 2 : 1)) }),
+      hasFrom: !!st.from.trim(), noFrom: !st.from.trim(), nextBg: st.from.trim() ? '#2350E6' : '#A9B9F2',
+      eta: this.eta(),
+      fromChips: ['На КАД', 'На ЗСД', 'Ленобласть', 'Трасса М-10 / М-11'].map(t => ({ t, pick: set({ from: t + ', ' }) })),
+      toOpts: TO.map(o => ({ ...o, ...sel(st.toKind === o.id), pick: set({ toKind: o.id, to: o.id === 'sto' ? st.to : o.t }) })),
+      sitOpts: SIT.map(o => ({ t: o.t, ...sel(st.sit === o.id), pick: set({ sit: o.id, sitPre: false, step: 4, q1: '', q2: '' }) })),
+      vehOpts: VEH.map(o => ({ t: o.t, ...sel(st.veh === o.id), pick: set({ veh: o.id }) })),
+      showQ1: needQ1, showQ2: needQ2, q1: opt3('q1'), q2: opt3('q2'),
+      noVeh: !st.veh, vehBg: st.veh ? '#2350E6' : '#A9B9F2',
+      result: this.result(),
+      fromShow: st.from || '—', toShow: st.to || 'решим с диспетчером',
+      sent: st.sent, notSent: !st.sent,
+      send: () => { const n = st.phone.replace(/\D/g, '').length; if (n >= 10 && n <= 11) this.setState({ sent: true, phoneErr: false }); else this.setState({ phoneErr: true }); },
+      restart: set({ step: 1, sit: '', sitPre: false, veh: '', q1: '', q2: '', to: '', toKind: '', sent: false, comment: '', showComment: false }),
+      factors: [
+        { n: '01', t: 'Подача', d: 'Выезд экипажа к автомобилю. За КАД — по километражу.' },
+        { n: '02', t: 'Маршрут', d: 'Расстояние от места погрузки до точки выгрузки.' },
+        { n: '03', t: 'Тип автомобиля', d: 'Легковой, кроссовер, микроавтобус, грузовой — разная масса и платформа.' },
+        { n: '04', t: 'Состояние', d: 'На ходу, после ДТП, с заблокированными колёсами или рулём.' },
+        { n: '05', t: 'Сложность погрузки', d: 'Кювет, паркинг, низкий клиренс, работа манипулятора.' }
+      ],
+      prices: [
+        { t: 'Легковой автомобиль', d: 'по СПб, платформа' }, { t: 'Кроссовер / SUV', d: 'по СПб' },
+        { t: 'Подкатные тележки', d: 'доплата за заблокированные колёса' }, { t: 'Манипулятор', d: 'кювет, перевёрнутые авто' },
+        { t: 'Грузовой эвакуатор', d: 'от 3,5 т' }, { t: 'За КАД и межгород', d: 'за километр' }
+      ],
+      complex: [
+        { p: 'Машина в кювете', s: 'Манипулятор поднимает стрелой, без протаскивания по грунту', link: 'Манипулятор →', url: '/manipulyator/' },
+        { p: 'Перевёрнута или на боку', s: 'Ставим на колёса стрелой и грузим на платформу', link: 'Сложная эвакуация →', url: '/slozhnaya-evakuaciya/' },
+        { p: 'После ДТП', s: 'Заберём с места, подскажем порядок действий и дадим документы для страховой', link: 'После ДТП →', url: '/posle-dtp/' },
+        { p: 'Нет колеса или сломана подвеска', s: 'Подкатные тележки или манипулятор — по состоянию', link: 'Подкатные тележки →', url: '/evakuator-s-podkatnymi-telezhkami/' },
+        { p: 'Заблокированы колёса, руль, КПП', s: 'Ставим тележки под колёса, закатываем без волочения', link: 'Подкатные тележки →', url: '/evakuator-s-podkatnymi-telezhkami/' },
+        { p: 'Сложный доступ', s: 'Двор, узкий проезд, подземный паркинг — подберём технику по габаритам', link: 'Описать ситуацию →', url: '#call' }
+      ],
+      caseMain: CASES[0], caseRest: CASES.slice(1), mini: MINI,
+      process: ['Звонок', 'Расчёт', 'Подтверждение', 'Выезд', 'Погрузка', 'Доставка', 'Оплата'],
+      fleet: [
+        { id: 'fleet-1', task: 'Стандартный легковой автомобиль', tech: 'Сдвижная платформа', ph: 'Фото: сдвижная платформа', url: '/ceny/' },
+        { id: 'fleet-2', task: 'Заблокированы колёса, руль, КПП', tech: 'Подкатные тележки', ph: 'Фото: тележки под колёсами', url: '/evakuator-s-podkatnymi-telezhkami/' },
+        { id: 'fleet-3', task: 'Кювет, перевёртыш, сложный доступ', tech: 'Манипулятор', ph: 'Фото: манипулятор в работе', url: '/manipulyator/' },
+        { id: 'fleet-4', task: 'Грузовой транспорт, спецтехника', tech: 'Грузовой эвакуатор', ph: 'Фото: грузовой эвакуатор', url: '/gruzovoy-evakuator/' }
+      ],
+      lo: ['Гатчина', 'Всеволожск', 'Пушкин', 'Колпино', 'Мурино', 'Кудрово'].map((name, i) => ({ name, url: '/lenoblast/' + ['gatchina', 'vsevolozhsk', 'pushkin', 'kolpino', 'murino', 'kudrovo'][i] + '/' })),
+      faq: [
+        { q: 'Сколько стоит эвакуатор?', a: 'Зависит от подачи, маршрута, типа автомобиля, его состояния и сложности погрузки. Диспетчер назовёт стоимость до выезда. Если условия на месте соответствуют заявленным, сумма не меняется.' },
+        { q: 'Через сколько приедете?', a: 'Ориентир подачи по Петербургу — 20–40 минут: около 20 минут в лучшем случае, обычно около 30, в час пик — до 40. Точное время диспетчер назовёт по адресу.' },
+        { q: 'Вы работаете круглосуточно и ночью?', a: 'Да, 24/7 — ночью, в выходные и праздники.' },
+        { q: 'Выезжаете за КАД?', a: 'Да, по всей Ленинградской области. Межгород — до 150–200 км от Петербурга, стоимость считаем по маршруту заранее.' },
+        { q: 'Заберёте машину после ДТП?', a: 'Да. Заберём с места, подскажем порядок действий и дадим документы для страховой. Если автомобиль не катится — используем подкатные тележки или манипулятор.' },
+        { q: 'Что делать, если колёса заблокированы?', a: 'Ничего делать не нужно — скажите об этом диспетчеру. Приедем с подкатными тележками и закатим машину на платформу без волочения.' },
+        { q: 'Можно ехать вместе с водителем?', a: 'Да, в кабине эвакуатора можно поехать вместе с автомобилем.' },
+        { q: 'Может ли измениться стоимость?', a: 'Только если ситуация на месте отличается от описанной — например, машина в кювете, а не на дороге. Тогда водитель предупредит до погрузки, и вы решите, продолжать ли.' },
+        { q: 'Кто отвечает, если машину повредят?', a: 'Мы. Ответственность компании застрахована, за автомобиль отвечаем от погрузки до выгрузки.' }
+      ].map((f, i) => ({ ...f, open: i === 0 }))
+    };
+  }
+}
+
+const comp = new Component();
+let vals = {}, pending = false;
+const get = (o, p) => p.split('.').reduce((a, k) => (a == null ? undefined : a[k]), o);
+const interp = t => t.replace(/\{\{([^}]+)\}\}/g, (m, p) => { const v = get(vals, p); return v == null ? '' : v; });
+function schedule() {
+  if (pending) return; pending = true;
+  Promise.resolve().then(() => { pending = false; update(); if (comp.componentDidUpdate) comp.componentDidUpdate(); });
+}
+function update() {
+  vals = comp.renderVals();
+  document.querySelectorAll('[data-if]').forEach(el => { el.hidden = !get(vals, el.dataset.if); });
+  document.querySelectorAll('[data-bind]').forEach(el => { const v = get(vals, el.dataset.bind); const s = v == null ? '' : String(v); if (el.textContent !== s) el.textContent = s; });
+  document.querySelectorAll('[data-bind-attr]').forEach(el => {
+    const m = JSON.parse(el.dataset.bindAttr);
+    for (const a in m) {
+      const v = get(vals, m[a]);
+      if (a === 'value') { const s = v == null ? '' : String(v); if (el.value !== s) el.value = s; }
+      else if (a === 'disabled' || a === 'open' || a === 'hidden') el[a] = !!v;
+      else el.setAttribute(a, v == null ? '' : v);
+    }
+  });
+  document.querySelectorAll('[data-bind-style]').forEach(el => { const m = JSON.parse(el.dataset.bindStyle); for (const p in m) el.style.setProperty(p, interp(m[p])); });
+}
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-action]'); if (!el || el.disabled) return;
+  const fn = get(vals, el.dataset.action); if (typeof fn === 'function') { e.preventDefault(); fn(e); }
+});
+document.addEventListener('input', e => {
+  const el = e.target.closest('[data-on-input]'); if (!el) return;
+  const fn = get(vals, el.dataset.onInput); if (typeof fn === 'function') fn(e);
+});
+update();
+if (comp.componentDidMount) comp.componentDidMount();
+})();

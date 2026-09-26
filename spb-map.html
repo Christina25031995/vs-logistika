@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Эвакуаторы ВС-Логистика на линии — районы СПб</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/map.css">
+</head>
+<body>
+<div id="map" role="region" aria-label="Эвакуаторы на линии по районам Санкт-Петербурга"></div>
+<div class="top"><div class="l1"><span class="live"></span><span id="liveTxt">Эвакуаторы на линии в реальном времени</span><span class="clk" id="clk"></span></div><div class="l2">2–3 экипажа работают в каждом районе</div></div>
+<div class="legend" id="legend"><span><i style="background:#1F9D55"></i>свободен</span><span><i style="background:#2350E6"></i>на заказе</span><span><i style="background:#C77700"></i>повышенная загрузка</span></div>
+<div class="panel" id="panel" aria-live="polite">
+  <div class="h"><div style="display:flex;flex-direction:column;gap:2px"><b id="pName"></b><span style="font-size:13px;color:#4A515C" id="pSub"></span></div><button class="x" id="pX" aria-label="Закрыть">✕</button></div>
+  <div class="row"><div><small>Ориентир подачи</small><strong id="pEta"></strong></div><div><small>Сейчас в районе</small><strong class="s" id="pSt"></strong></div></div>
+  <div class="btns"><button id="pCall">Вызвать эвакуатор</button><a href="tel:+78129110700" target="_top">Позвонить</a></div>
+  <a class="lnk" id="pLink" target="_top" href="#"></a>
+</div>
+<script src="js/map.js"></script>
+</body>
+</html>
