@@ -62,7 +62,7 @@ const MINI = (() => {
   for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) tiles.push({ bg: 'url(https://tile.openstreetmap.org/' + z + '/' + (ox + c) + '/' + (oy + r) + '.png)' });
   return { tiles, left: 'calc(50% - ' + pmx + 'px)', top: 'calc(50% - ' + pmy + 'px)', path: 'M' + pax + ' ' + pay + ' Q' + Math.round(cx) + ' ' + Math.round(cy) + ' ' + pbx + ' ' + pby, ax: pax, ay: pay, bx0: pbx - 7, by0: pby - 7 };
 })();
-const sel = on => ({ bd: on ? '#2350E6' : '#E3E6EB', bg: on ? '#EAF0FF' : '#fff' });
+const sel = on => ({ bd: on ? '#FFD400' : '#E3E6EB', bg: on ? '#FFF7CC' : '#fff' });
 
 class Component extends DCLogic {
   state = { w: typeof window !== 'undefined' ? VW() : 1440, step: 1, from: '', to: '', toKind: '', sit: '', sitPre: false, cx: false, veh: '', q1: '', q2: '', menuOpen: false, flowOpen: false, fResume: false, fForm: false, fstep: 1, q3: '', phone: '', comment: '', showComment: false, sent: false, phoneErr: false, locating: false, locErr: false };
@@ -161,7 +161,7 @@ class Component extends DCLogic {
     if (!res && fs <= 4) { if (st.cx && !st.sit) known.push('Сложная эвакуация'); if (st.sit && fs !== 3) known.push('Ситуация: ' + sitL[st.sit]); if (fs >= 2 && st.from.trim()) known.push('Откуда: ' + short(st.from.trim())); }
     const needQ1 = ['dtp', 'blocked', 'flip', 'other'].includes(st.sit), needQ2 = ['dtp', 'blocked'].includes(st.sit), needQ3 = st.sit === 'dtp';
     const q = (key, text) => ({ q: text, opts: ['Да', 'Нет', 'Не знаю'].map(t => ({ t, ...sel(st[key] === t), pick: set({ [key]: t }) })) });
-    const mark = on => ({ dot: on ? '#2350E6' : '#fff', mark: on ? '✓' : '' });
+    const mark = on => ({ dot: on ? '#FFD400' : '#fff', mark: on ? '✓' : '' });
     const VM = [['car', 'Легковой'], ['suv', 'Кроссовер / внедорожник'], ['van', 'Коммерческий'], ['truck', 'Грузовой'], ['moto', 'Другой']];
     const TM = [['sto', 'На СТО', 'Назовите сервис — найдём адрес'], ['addr', 'Другой адрес', 'Дом, стоянка, парковка'], ['unknown', 'Пока не знаю', 'Решим вместе с диспетчером']];
     const after2 = st.sit && st.sitPre ? 4 : 3;
@@ -172,11 +172,11 @@ class Component extends DCLogic {
       flowOn: mobile && st.flowOpen, fResumeOn: res,
       fs1: !res && fs === 1, fs2: !res && fs === 2, fs3: !res && fs === 3, fs4: !res && fs === 4, fs5: !res && fs === 5, fs6: !res && fs === 6,
       fShowProgress: !res && fs <= 5, fStepLabel: fs <= 4 ? 'Шаг ' + fs + ' из 4' : 'Расчёт готов',
-      fProgress: [1, 2, 3, 4].map(i => ({ c: i <= fs ? '#2350E6' : '#E3E6EB' })),
+      fProgress: [1, 2, 3, 4].map(i => ({ c: i <= fs ? '#FFD400' : '#E3E6EB' })),
       fKnown: known, fHasKnown: known.length > 0,
       fBarNext: !res && fs <= 4, fBarResult: !res && fs === 5 && !st.fForm, fBarForm: !res && fs === 5 && st.fForm, fBarDone: !res && fs === 6, fBarResume: res,
       fBackLabel: (res || fs === 1 || fs === 6) ? 'На сайт' : 'Назад', fEtaShort: String(this.result().eta).replace('≈', ''),
-      fNextLabel: fs === 4 ? 'Рассчитать вызов' : 'Продолжить', fNextDisabled: dis, fNextBg: dis ? '#A9B9F2' : '#2350E6',
+      fNextLabel: fs === 4 ? 'Рассчитать вызов' : 'Продолжить', fNextDisabled: dis, fNextBg: dis ? '#F3E3A0' : '#FFD400',
       fNext: () => { if (dis) return; this.setState({ fstep: fs === 1 ? 2 : fs === 2 ? after2 : fs === 3 ? 4 : 5 }); },
       fBack: () => { if (res || fs === 1) return this.setState({ flowOpen: false, fResume: false }); if (fs === 6) return this.setState(Object.assign({}, this.resetFlow, { flowOpen: false })); if (fs === 5 && st.fForm) return this.setState({ fForm: false }); this.setState({ fstep: fs === 4 && st.sit && st.sitPre ? 2 : fs - 1 }); },
       fClose: () => this.setState({ flowOpen: false, fResume: false }),
@@ -253,16 +253,16 @@ class Component extends DCLogic {
       s1: st.step === 1, s2: st.step === 2, s3: st.step === 3, s4: st.step === 4, s5: st.step === 5,
       canBack: st.step > 1, back: () => this.setState({ step: st.step === 4 && st.sit && st.sitPre ? 2 : Math.max(1, st.step - 1), sent: false }),
       stepLabel: st.step < 5 ? 'Шаг ' + st.step + ' из 4' : 'Результат',
-      progress: [1, 2, 3, 4].map(i => ({ c: i <= st.step ? '#2350E6' : '#E3E6EB' })),
+      progress: [1, 2, 3, 4].map(i => ({ c: i <= st.step ? '#FFD400' : '#E3E6EB' })),
       next: () => this.setState({ step: Math.min(5, st.step + (st.step === 2 && st.sit ? 2 : 1)) }),
-      hasFrom: !!st.from.trim(), noFrom: !st.from.trim(), nextBg: st.from.trim() ? '#2350E6' : '#A9B9F2',
+      hasFrom: !!st.from.trim(), noFrom: !st.from.trim(), nextBg: st.from.trim() ? '#FFD400' : '#F3E3A0',
       eta: this.eta(),
       fromChips: ['На КАД', 'На ЗСД', 'Ленобласть', 'Трасса М-10 / М-11'].map(t => ({ t, pick: set({ from: t + ', ' }) })),
       toOpts: TO.map(o => ({ ...o, ...sel(st.toKind === o.id), pick: set(Object.assign({ toKind: o.id, to: o.id === 'sto' ? st.to : o.t }, mobile ? { step: st.sit ? 4 : 3 } : {})) })),
       sitOpts: SIT.map(o => ({ t: o.t, ...sel(st.sit === o.id), pick: set({ sit: o.id, sitPre: false, step: 4, q1: '', q2: '' }) })),
       vehOpts: VEH.map(o => ({ t: o.t, ...sel(st.veh === o.id), pick: set(Object.assign({ veh: o.id }, mobile && !needQ1 && !needQ2 ? { step: 5 } : {})) })),
       showQ1: needQ1, showQ2: needQ2, q1: opt3('q1'), q2: opt3('q2'),
-      noVeh: !st.veh, vehBg: st.veh ? '#2350E6' : '#A9B9F2',
+      noVeh: !st.veh, vehBg: st.veh ? '#FFD400' : '#F3E3A0',
       result: this.result(),
       fromShow: st.from || '—', toShow: st.to || 'решим с диспетчером',
       sent: st.sent, notSent: !st.sent,
