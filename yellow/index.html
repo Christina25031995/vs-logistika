@@ -40,6 +40,11 @@ button{align-items:center;justify-content:center}
 </style>
 <style>
 /* FAQ: компактно, один открытый ответ, блок помещается на экран */
+/* фото парка в блоке «Доверие» */
+.fleet-fig{margin:0;display:flex;flex-direction:column;gap:10px}
+.fleet-fig img{display:block;width:100%;aspect-ratio:21/9;object-fit:cover;border-radius:18px;background:#E3E6EB}
+.fleet-fig figcaption{font-size:14px;color:#6B7280}
+.is-m .fleet-fig img{aspect-ratio:3/2;border-radius:14px}
 .faq-q summary{padding:13px 0!important;font-size:clamp(16px,1.15vw,18px)!important}
 .faq-q summary::-webkit-details-marker{display:none}
 .faq-q p{margin:0 0 14px!important;font-size:15.5px!important}
@@ -627,6 +632,10 @@ header.y-dark{background:rgba(17,18,20,.96)!important}
 <section data-screen-label="Доверие" style="background:#fff;border-top:1px solid #E3E6EB;border-bottom:1px solid #E3E6EB">
   <div style="max-width:1680px;margin:0 auto;padding:clamp(48px,7vw,96px) clamp(16px,3.4vw,56px);display:flex;flex-direction:column;gap:clamp(28px,4vw,48px)">
     <h2 style="margin:0;font-size:clamp(28px,3.4vw,42px);line-height:1.1;font-weight:700;letter-spacing:-0.025em;max-width:760px;text-wrap:balance">Отвечаем за автомобиль<br>от погрузки до выгрузки</h2>
+    <figure class="fleet-fig">
+      <picture><source media="(max-width:700px)" srcset="../assets/photos/fleet-3x2.jpg"><img src="../assets/photos/fleet-wide.jpg" alt="Два манипулятора ВС-Логистики на базе держат автомобили на весу" loading="lazy"></picture>
+      <figcaption>Наша техника на&nbsp;базе. Реальное фото, не&nbsp;сток</figcaption>
+    </figure>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:clamp(20px,3vw,40px)" data-bind-style='{"grid-template-columns": "repeat(auto-fit,minmax(min(100%,{{trustMin}}),1fr))"}'>
       <div style="display:flex;flex-direction:column;gap:6px;border-top:2px solid #16191F;padding-top:16px"><span style="font-size:clamp(40px,5vw,60px);font-weight:700;letter-spacing:-0.04em;line-height:1">10 лет</span><span style="font-size:15px;color:#4A515C;line-height:1.45">эвакуируем автомобили в Петербурге и области</span></div>
       <div style="display:flex;flex-direction:column;gap:6px;border-top:2px solid #16191F;padding-top:16px"><span style="font-size:clamp(40px,5vw,60px);font-weight:700;letter-spacing:-0.04em;line-height:1">5000+</span><span style="font-size:15px;color:#4A515C;line-height:1.45">выполненных эвакуаций, включая ДТП и кюветы</span></div>
