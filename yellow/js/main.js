@@ -44,7 +44,7 @@ const DISTRICTS = [
 const KEY = 'vsl-calc-v3';
 const GEO_M = ['Приморский', 'Московский', 'Невский', 'Выборгский', 'Калининский', 'Красносельский', 'Василеостровский', 'Петроградский'];
 const CASES = [
-  { id: 'case-1', district: 'Ленобласть · трасса', car: 'Hyundai Solaris', what: 'Съехал в кювет в снегопад, колёса ушли в снег', a: 'Трасса, съезд в кювет', b: 'СТО', km: '12 км', tech: 'Манипулятор', eta: '35 мин', cost: 'демо ₽' },
+  { id: 'case-1', district: 'Ленобласть · Кудрово', car: 'Hyundai Solaris', what: 'Съехал в кювет в снегопад, колёса ушли в снег', a: 'Трасса за КАД, кювет', b: 'СТО, Кудрово', km: '3 км', tech: 'Манипулятор', eta: '35 мин', cost: 'демо ₽' },
   { id: 'case-2', district: 'Ночной вызов', car: 'Автомобиль после пожара', what: 'Кузов после возгорания, своим ходом не катится', a: 'Парковка у ТЦ', b: 'Стоянка', km: '9 км', tech: 'Манипулятор + прицеп', eta: '34 мин', cost: 'демо ₽' },
   { id: 'case-3', district: 'Двор жилого комплекса', car: 'BMW X1', what: 'Погрузка стрелой у дома, без заезда на платформу', a: 'Двор ЖК', b: 'СТО', km: '6 км', tech: 'Манипулятор', eta: '28 мин', cost: 'демо ₽' }
 ];
@@ -52,7 +52,7 @@ const MINI = (() => {
   const z = 14, n = Math.pow(2, z);
   const tx = lon => (lon + 180) / 360 * n;
   const ty = lat => { const r = lat * Math.PI / 180; return (1 - Math.log(Math.tan(r) + 1 / Math.cos(r)) / Math.PI) / 2 * n; };
-  const A = [59.9660, 30.3110], B = [59.9790, 30.3440];
+  const A = [59.9035, 30.5530], B = [59.9060, 30.5180];
   const ax = tx(A[1]), ay = ty(A[0]), bx = tx(B[1]), by = ty(B[0]);
   const mx = (ax + bx) / 2, my = (ay + by) / 2, ox = Math.floor(mx) - 2, oy = Math.floor(my) - 2;
   const P = (x, y) => [Math.round((x - ox) * 256), Math.round((y - oy) * 256)];
