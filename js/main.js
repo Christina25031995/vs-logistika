@@ -17,23 +17,23 @@ class DCLogic {
 }
 
 const SIT = [
-  { id: 'start', t: 'Не заводится', sub: 'Аккумулятор, стартер, электрика', tech: 'Платформа' },
-  { id: 'dtp', t: 'ДТП', sub: 'Заберём, даже если не катится', tech: 'Платформа или тележки' },
-  { id: 'blocked', t: 'Колёса заблокированы', sub: 'Колёса, руль или КПП', tech: 'Подкатные тележки' },
-  { id: 'ditch', t: 'Машина в кювете', sub: 'Съехала с дороги, снег, грязь', tech: 'Манипулятор' },
-  { id: 'flip', t: 'Перевёрнута или сильно повреждена', sub: 'На боку, на крыше, без колеса', tech: 'Манипулятор' },
-  { id: 'low', t: 'Низкий клиренс', sub: 'Обвес, заниженная подвеска', tech: 'Платформа, пологий заезд' },
-  { id: 'move', t: 'Нужна перевозка', sub: 'Исправное авто к удобному времени', tech: 'Платформа' },
-  { id: 'other', t: 'Другое', sub: 'Опишите, и диспетчер подскажет', tech: 'Подберём' }
+  { id: 'start', t: 'Не заводится', sub: 'Аккумулятор, стартер, электрика', tech: 'Платформа' },
+  { id: 'dtp', t: 'ДТП', sub: 'Заберём, даже если не катится', tech: 'Платформа или тележки' },
+  { id: 'blocked', t: 'Колёса заблокированы', sub: 'Колёса, руль или КПП', tech: 'Подкатные тележки' },
+  { id: 'ditch', t: 'Машина в кювете', sub: 'Съехала с дороги, снег, грязь', tech: 'Манипулятор' },
+  { id: 'flip', t: 'Перевёрнута или сильно повреждена', sub: 'На боку, на крыше, без колеса', tech: 'Манипулятор' },
+  { id: 'low', t: 'Низкий клиренс', sub: 'Обвес, заниженная подвеска', tech: 'Платформа, пологий заезд' },
+  { id: 'move', t: 'Нужна перевозка', sub: 'Исправное авто к удобному времени', tech: 'Платформа' },
+  { id: 'other', t: 'Другое', sub: 'Опишите, и диспетчер подскажет', tech: 'Подберём' }
 ];
 const VEH = [
-  { id: 'car', t: 'Легковой' }, { id: 'suv', t: 'Кроссовер / SUV' }, { id: 'van', t: 'Микроавтобус' },
+  { id: 'car', t: 'Легковой' }, { id: 'suv', t: 'Кроссовер / SUV' }, { id: 'van', t: 'Микроавтобус' },
   { id: 'truck', t: 'Грузовой' }, { id: 'moto', t: 'Мотоцикл' }
 ];
 const TO = [
-  { id: 'sto', t: 'На СТО или в сервис', sub: 'Назовите сервис, найдём адрес' },
-  { id: 'home', t: 'Домой или на стоянку', sub: '' },
-  { id: 'unknown', t: 'Пока не знаю', sub: 'Решим вместе с диспетчером' }
+  { id: 'sto', t: 'На СТО или в сервис', sub: 'Назовите сервис, найдём адрес' },
+  { id: 'home', t: 'Домой или на стоянку', sub: '' },
+  { id: 'unknown', t: 'Пока не знаю', sub: 'Решим вместе с диспетчером' }
 ];
 const DISTRICTS = [
   ['Приморский', 'primorskiy', '20–30'], ['Красносельский', 'krasnoselskiy', '25–35'], ['Московский', 'moskovskiy', '20–30'],
@@ -44,9 +44,9 @@ const DISTRICTS = [
 const KEY = 'vsl-calc-v3';
 const GEO_M = ['Приморский', 'Московский', 'Невский', 'Выборгский', 'Калининский', 'Красносельский', 'Василеостровский', 'Петроградский'];
 const CASES = [
-  { id: 'case-1', district: 'Ленобласть · Кудрово', car: 'Hyundai Solaris', what: 'Съехал в кювет в снегопад, колёса ушли в снег', a: 'Трасса за КАД, кювет', b: 'СТО, Кудрово', km: '3 км', tech: 'Манипулятор', eta: '35 мин', cost: 'демо ₽' },
-  { id: 'case-2', district: 'Ночной вызов', car: 'Автомобиль после пожара', what: 'Кузов после возгорания, своим ходом не катится', a: 'Парковка у ТЦ', b: 'Стоянка', km: '9 км', tech: 'Манипулятор + прицеп', eta: '34 мин', cost: 'демо ₽' },
-  { id: 'case-3', district: 'Двор жилого комплекса', car: 'BMW X1', what: 'Погрузка стрелой у дома, без заезда на платформу', a: 'Двор ЖК', b: 'СТО', km: '6 км', tech: 'Манипулятор', eta: '28 мин', cost: 'демо ₽' }
+  { id: 'case-1', district: 'Ленобласть · Кудрово', car: 'Hyundai Solaris', what: 'Съехал в кювет в снегопад, колёса ушли в снег', a: 'Трасса за КАД, кювет', b: 'СТО, Кудрово', km: '3 км', tech: 'Манипулятор', eta: '35 мин', cost: 'демо ₽' },
+  { id: 'case-2', district: 'Ночной вызов', car: 'Автомобиль после пожара', what: 'Кузов после возгорания, своим ходом не катится', a: 'Парковка у ТЦ', b: 'Стоянка', km: '9 км', tech: 'Манипулятор + прицеп', eta: '34 мин', cost: 'демо ₽' },
+  { id: 'case-3', district: 'Двор жилого комплекса', car: 'BMW X1', what: 'Погрузка стрелой у дома, без заезда на платформу', a: 'Двор ЖК', b: 'СТО', km: '6 км', tech: 'Манипулятор', eta: '28 мин', cost: 'демо ₽' }
 ];
 const MINI = (() => {
   const z = 14, n = Math.pow(2, z);
@@ -74,19 +74,19 @@ class Component extends DCLogic {
     if (demo) {
       this.demo = true;
       const base = { from: '', to: '', toKind: '', sit: '', sitPre: false, veh: '', q1: '', q2: '', q3: '', sent: false, phone: '', menuOpen: false, step: 1, flowOpen: false, fResume: false, fForm: false, fstep: 1 };
-      const FROM = 'Приморский р-н, Комендантский пр., 30';
-      const S = { menu: { menuOpen: true }, calc4: { step: 4, from: 'КАД, съезд на Выборгское ш.', toKind: 'sto', to: 'СТО, Парголово', sit: 'dtp', sitPre: true, veh: 'car', q1: 'Нет' },
+      const FROM = 'Приморский р-н, Комендантский пр., 30';
+      const S = { menu: { menuOpen: true }, calc4: { step: 4, from: 'КАД, съезд на Выборгское ш.', toKind: 'sto', to: 'СТО, Парголово', sit: 'dtp', sitPre: true, veh: 'car', q1: 'Нет' },
         f1: { flowOpen: true, fstep: 1 },
         f2: { flowOpen: true, fstep: 2, from: FROM },
-        f3: { flowOpen: true, fstep: 3, from: FROM, toKind: 'sto', to: 'СТО на ул. Савушкина' },
-        f4: { flowOpen: true, fstep: 4, from: FROM, toKind: 'sto', to: 'СТО на ул. Савушкина', sit: 'dtp', veh: 'car', q1: 'Нет' },
-        f5: { flowOpen: true, fstep: 5, from: FROM, toKind: 'sto', to: 'СТО на ул. Савушкина', sit: 'blocked', veh: 'car', q1: 'Нет', q2: 'Да' },
-        f5form: { flowOpen: true, fstep: 5, fForm: true, from: FROM, toKind: 'sto', to: 'СТО на ул. Савушкина', sit: 'blocked', veh: 'car', q1: 'Нет', q2: 'Да' },
-        f6: { flowOpen: true, fstep: 6, sent: true, phone: '+7 911 000-00-00', from: FROM, toKind: 'sto', to: 'СТО на ул. Савушкина', sit: 'blocked', veh: 'car' },
-        resume: { flowOpen: true, fResume: true, fstep: 3, from: FROM, toKind: 'sto', to: 'СТО на ул. Савушкина' },
+        f3: { flowOpen: true, fstep: 3, from: FROM, toKind: 'sto', to: 'СТО на ул. Савушкина' },
+        f4: { flowOpen: true, fstep: 4, from: FROM, toKind: 'sto', to: 'СТО на ул. Савушкина', sit: 'dtp', veh: 'car', q1: 'Нет' },
+        f5: { flowOpen: true, fstep: 5, from: FROM, toKind: 'sto', to: 'СТО на ул. Савушкина', sit: 'blocked', veh: 'car', q1: 'Нет', q2: 'Да' },
+        f5form: { flowOpen: true, fstep: 5, fForm: true, from: FROM, toKind: 'sto', to: 'СТО на ул. Савушкина', sit: 'blocked', veh: 'car', q1: 'Нет', q2: 'Да' },
+        f6: { flowOpen: true, fstep: 6, sent: true, phone: '+7 911 000-00-00', from: FROM, toKind: 'sto', to: 'СТО на ул. Савушкина', sit: 'blocked', veh: 'car' },
+        resume: { flowOpen: true, fResume: true, fstep: 3, from: FROM, toKind: 'sto', to: 'СТО на ул. Савушкина' },
         dtp: { flowOpen: true, fstep: 1, sit: 'dtp', sitPre: true },
-        full: { step: 5, from: 'Приморский пр., 72', toKind: 'sto', to: 'СТО, ул. Савушкина', sit: 'blocked', sitPre: true, veh: 'car', q1: 'Нет' },
-        result: { step: 5, from: 'Приморский пр., 72', toKind: 'sto', to: 'СТО, ул. Савушкина', sit: 'blocked', sitPre: true, veh: 'car', q1: 'Нет' } }[demo] || {};
+        full: { step: 5, from: 'Приморский пр., 72', toKind: 'sto', to: 'СТО, ул. Савушкина', sit: 'blocked', sitPre: true, veh: 'car', q1: 'Нет' },
+        result: { step: 5, from: 'Приморский пр., 72', toKind: 'sto', to: 'СТО, ул. Савушкина', sit: 'blocked', sitPre: true, veh: 'car', q1: 'Нет' } }[demo] || {};
       this.setState({ ...base, ...S });
       const target = { mid: 'price', map: 'live-map', sit: 'sit', calc1: 'calc', calc4: 'calc', result: 'calc' }[demo];
       const go = () => { const el = document.getElementById(target); if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 64, behavior: 'instant' }); };
@@ -98,7 +98,7 @@ class Component extends DCLogic {
     window.addEventListener('load', this.onResize);
     if (window.ResizeObserver) { this.ro = new ResizeObserver(() => { if (VW() !== this.state.w) this.setState({ w: VW() }); }); this.ro.observe(document.documentElement); }
     window.addEventListener('resize', this.onResize);
-    this.onMsg = e => { const m = e.data || {}; if (m.type !== 'vsl-map' || m.action !== 'call') return; if (this.state.w < 820) return this.openFlow({ from: m.district ? m.district + ' район' : this.state.from, fstep: 2 }); this.setState({ from: m.district ? m.district + ' район, ' : this.state.from, step: 1 }); this.scrollTo('calc'); };
+    this.onMsg = e => { const m = e.data || {}; if (m.type !== 'vsl-map' || m.action !== 'call') return; if (this.state.w < 820) return this.openFlow({ from: m.district ? m.district + ' район' : this.state.from, fstep: 2 }); this.setState({ from: m.district ? m.district + ' район, ' : this.state.from, step: 1 }); this.scrollTo('calc'); };
     window.addEventListener('message', this.onMsg);
   }
   componentWillUnmount() { window.removeEventListener('resize', this.onResize); window.removeEventListener('message', this.onMsg); window.removeEventListener('load', this.onResize); if (this.ro) this.ro.disconnect(); }
@@ -126,7 +126,7 @@ class Component extends DCLogic {
     if (!navigator.geolocation) return this.setState({ locErr: true });
     this.setState({ locating: true, locErr: false });
     navigator.geolocation.getCurrentPosition(
-      p => { this.setState({ locating: false, from: 'Моё местоположение · ' + p.coords.latitude.toFixed(4) + ', ' + p.coords.longitude.toFixed(4) }); document.querySelectorAll('iframe[data-map]').forEach(f => { try { f.contentWindow.postMessage({ type: 'vsl-locate', lat: p.coords.latitude, lon: p.coords.longitude }, '*'); } catch (e) {} }); },
+      p => { this.setState({ locating: false, from: 'Моё местоположение · ' + p.coords.latitude.toFixed(4) + ', ' + p.coords.longitude.toFixed(4) }); document.querySelectorAll('iframe[data-map]').forEach(f => { try { f.contentWindow.postMessage({ type: 'vsl-locate', lat: p.coords.latitude, lon: p.coords.longitude }, '*'); } catch (e) {} }); },
       () => this.setState({ locating: false, locErr: true }),
       { timeout: 8000, maximumAge: 60000 }
     );
@@ -141,7 +141,7 @@ class Component extends DCLogic {
     const { sit, veh, q1, q2 } = this.state;
     const s = SIT.find(x => x.id === sit) || SIT[7];
     const v = VEH.find(x => x.id === veh);
-    let tech = 'Сдвижная платформа', why = 'Автомобиль заезжает или затягивается лебёдкой на платформу. Подходит для большинства легковых машин.';
+    let tech = 'Сдвижная платформа', why = 'Автомобиль заезжает или затягивается лебёдкой на платформу. Подходит для большинства легковых машин.';
     if (veh === 'truck') { tech = 'Грузовой эвакуатор'; why = 'Для грузового транспорта нужен эвакуатор большей грузоподъёмности, диспетчер уточнит массу и габариты.'; }
     else if (sit === 'ditch' || sit === 'flip' || (this.state.cx && sit === 'other')) { tech = 'Манипулятор'; why = 'Стрела поднимает автомобиль и ставит на платформу без протаскивания, так не добавится новых повреждений.'; }
     else if (sit === 'blocked' || q1 === 'Нет' || q2 === 'Да' || this.state.q3 === 'Да') { tech = 'Платформа + подкатные тележки'; why = 'Тележки ставятся под заблокированные колёса, и машину можно закатить на платформу без волочения.'; }
@@ -151,32 +151,32 @@ class Component extends DCLogic {
     const eta = (sit === 'ditch' || sit === 'flip') ? '≈30–40 мин' : this.eta();
     const f = this.state.from.toLowerCase();
     const dm = DISTRICTS.find(([n]) => f.includes(n.slice(0, 5).toLowerCase()));
-    return { tech, why, eta, district: dm ? dm[0] : 'уточнит диспетчер', summary: s.t + (v ? ' · ' + v.t : '') };
+    return { tech, why, eta, district: dm ? dm[0] : 'уточнит диспетчер', summary: s.t + (v ? ' · ' + v.t : '') };
   }
   flowVals(st, mobile, set) {
     const fs = st.fstep, res = st.fResume;
-    const sitL = { start: 'Не заводится', dtp: 'ДТП', blocked: 'Колёса заблокированы', ditch: 'Машина в кювете', flip: 'Перевёрнута / разбита', low: 'Низкий клиренс', move: 'Нужна перевозка', other: 'Другое' };
+    const sitL = { start: 'Не заводится', dtp: 'ДТП', blocked: 'Колёса заблокированы', ditch: 'Машина в кювете', flip: 'Перевёрнута / разбита', low: 'Низкий клиренс', move: 'Нужна перевозка', other: 'Другое' };
     const short = s => { s = s.replace(/[,\s]+$/, ''); return s.length > 30 ? s.slice(0, 29) + '…' : s; };
     const known = [];
-    if (!res && fs <= 4) { if (st.cx && !st.sit) known.push('Сложная эвакуация'); if (st.sit && fs !== 3) known.push('Ситуация: ' + sitL[st.sit]); if (fs >= 2 && st.from.trim()) known.push('Откуда: ' + short(st.from.trim())); }
+    if (!res && fs <= 4) { if (st.cx && !st.sit) known.push('Сложная эвакуация'); if (st.sit && fs !== 3) known.push('Ситуация: ' + sitL[st.sit]); if (fs >= 2 && st.from.trim()) known.push('Откуда: ' + short(st.from.trim())); }
     const needQ1 = ['dtp', 'blocked', 'flip', 'other'].includes(st.sit), needQ2 = ['dtp', 'blocked'].includes(st.sit), needQ3 = st.sit === 'dtp';
     const q = (key, text) => ({ q: text, opts: ['Да', 'Нет', 'Не знаю'].map(t => ({ t, ...sel(st[key] === t), pick: set({ [key]: t }) })) });
     const mark = on => ({ dot: on ? '#2350E6' : '#fff', mark: on ? '✓' : '' });
-    const VM = [['car', 'Легковой'], ['suv', 'Кроссовер / внедорожник'], ['van', 'Коммерческий'], ['truck', 'Грузовой'], ['moto', 'Другой']];
-    const TM = [['sto', 'На СТО', 'Назовите сервис, найдём адрес'], ['addr', 'Другой адрес', 'Дом, стоянка, парковка'], ['unknown', 'Пока не знаю', 'Решим вместе с диспетчером']];
+    const VM = [['car', 'Легковой'], ['suv', 'Кроссовер / внедорожник'], ['van', 'Коммерческий'], ['truck', 'Грузовой'], ['moto', 'Другой']];
+    const TM = [['sto', 'На СТО', 'Назовите сервис, найдём адрес'], ['addr', 'Другой адрес', 'Дом, стоянка, парковка'], ['unknown', 'Пока не знаю', 'Решим вместе с диспетчером']];
     const after2 = st.sit && st.sitPre ? 4 : 3;
     const dis = (fs === 1 && !st.from.trim()) || (fs === 2 && !st.toKind) || (fs === 3 && !st.sit) || (fs === 4 && !st.veh);
     const f = st.from.toLowerCase(); const dm = DISTRICTS.find(([n]) => f.includes(n.slice(0, 5).toLowerCase()));
-    const toTxt = st.toKind === 'unknown' ? 'решим с диспетчером' : (st.to.trim() || (st.toKind === 'sto' ? 'СТО' : 'адрес уточним'));
+    const toTxt = st.toKind === 'unknown' ? 'решим с диспетчером' : (st.to.trim() || (st.toKind === 'sto' ? 'СТО' : 'адрес уточним'));
     return {
       flowOn: mobile && st.flowOpen, fResumeOn: res,
       fs1: !res && fs === 1, fs2: !res && fs === 2, fs3: !res && fs === 3, fs4: !res && fs === 4, fs5: !res && fs === 5, fs6: !res && fs === 6,
-      fShowProgress: !res && fs <= 5, fStepLabel: fs <= 4 ? 'Шаг ' + fs + ' из 4' : 'Расчёт готов',
+      fShowProgress: !res && fs <= 5, fStepLabel: fs <= 4 ? 'Шаг ' + fs + ' из 4' : 'Расчёт готов',
       fProgress: [1, 2, 3, 4].map(i => ({ c: i <= fs ? '#2350E6' : '#E3E6EB' })),
       fKnown: known, fHasKnown: known.length > 0,
       fBarNext: !res && fs <= 4, fBarResult: !res && fs === 5 && !st.fForm, fBarForm: !res && fs === 5 && st.fForm, fBarDone: !res && fs === 6, fBarResume: res,
       fBackLabel: (res || fs === 1 || fs === 6) ? 'На сайт' : 'Назад', fEtaShort: String(this.result().eta).replace('≈', ''),
-      fNextLabel: fs === 4 ? 'Рассчитать вызов' : 'Продолжить', fNextDisabled: dis, fNextBg: dis ? '#A9B9F2' : '#2350E6',
+      fNextLabel: fs === 4 ? 'Рассчитать вызов' : 'Продолжить', fNextDisabled: dis, fNextBg: dis ? '#A9B9F2' : '#2350E6',
       fNext: () => { if (dis) return; this.setState({ fstep: fs === 1 ? 2 : fs === 2 ? after2 : fs === 3 ? 4 : 5 }); },
       fBack: () => { if (res || fs === 1) return this.setState({ flowOpen: false, fResume: false }); if (fs === 6) return this.setState(Object.assign({}, this.resetFlow, { flowOpen: false })); if (fs === 5 && st.fForm) return this.setState({ fForm: false }); this.setState({ fstep: fs === 4 && st.sit && st.sitPre ? 2 : fs - 1 }); },
       fClose: () => this.setState({ flowOpen: false, fResume: false }),
@@ -184,15 +184,15 @@ class Component extends DCLogic {
       fRestart: () => this.setState(Object.assign({}, this.resetFlow, { fstep: st.from.trim() ? 2 : 1 })),
       fDone: () => this.setState(Object.assign({}, this.resetFlow, { flowOpen: false })),
       fOpenForm: () => { this.setState({ fForm: true }); setTimeout(() => { const el = document.getElementById('flow-phone'); if (el) el.focus(); }, 60); }, fForm: st.fForm, fNoForm: !st.fForm,
-      fSummary: [st.sit ? sitL[st.sit] : '', st.from.trim() ? short(st.from.trim()) : ''].filter(Boolean).join(', ') || 'адрес и детали',
+      fSummary: [st.sit ? sitL[st.sit] : '', st.from.trim() ? short(st.from.trim()) : ''].filter(Boolean).join(', ') || 'адрес и детали',
       fChips: ['КАД', 'ЗСД', 'Ленобласть'].map(t => ({ t, pick: set({ from: t + ', ' }) })),
-      fDistrictLine: dm ? 'Вы указали: ' + dm[0] + ' район' : 'Адрес принят',
+      fDistrictLine: dm ? 'Вы указали: ' + dm[0] + ' район' : 'Адрес принят',
       fToOpts: TM.map(([id, t, sub]) => ({ t, sub, ...sel(st.toKind === id), ...mark(st.toKind === id), pick: () => this.setState(id === 'unknown' ? { toKind: id, to: '', fstep: after2 } : { toKind: id, to: st.toKind === id ? st.to : '' }) })),
-      fNeedTo: st.toKind === 'sto' || st.toKind === 'addr', fToPh: st.toKind === 'sto' ? 'Название или адрес СТО' : 'Куда отвезти: улица, дом',
+      fNeedTo: st.toKind === 'sto' || st.toKind === 'addr', fToPh: st.toKind === 'sto' ? 'Название или адрес СТО' : 'Куда отвезти: улица, дом',
       fSitOpts: (st.cx ? ['ditch', 'flip', 'dtp', 'blocked', 'low', 'start', 'move', 'other'] : Object.keys(sitL)).map(id => ({ t: sitL[id], ...sel(st.sit === id), pick: set({ sit: id, sitPre: false, q1: '', q2: '', q3: '', fstep: 4 }) })),
       fVehOpts: VM.map(([id, t]) => ({ t, ...sel(st.veh === id), ...mark(st.veh === id), pick: set({ veh: id }) })),
-      fQs: [needQ1 && q('q1', 'Колёса вращаются?'), needQ2 && q('q2', 'Руль заблокирован?'), needQ3 && q('q3', 'Есть сильные повреждения?')].filter(Boolean),
-      fRoute: short(st.from.trim() || 'адрес уточним') + ' → ' + toTxt
+      fQs: [needQ1 && q('q1', 'Колёса вращаются?'), needQ2 && q('q2', 'Руль заблокирован?'), needQ3 && q('q3', 'Есть сильные повреждения?')].filter(Boolean),
+      fRoute: short(st.from.trim() || 'адрес уточним') + ' → ' + toTxt
     };
   }
   renderVals() {
@@ -216,8 +216,8 @@ class Component extends DCLogic {
       headerH: mobile ? '56px' : '72px', headerGap: mobile ? '10px' : '28px', subDisplay: mobile ? 'none' : 'block', subFlex: mobile ? 'none' : 'flex', sitGridDisplay: mobile ? 'none' : 'grid',
       menuOpen: st.menuOpen, menuClosed: !st.menuOpen, menuOpenM: mobile && st.menuOpen, toggleMenu: () => this.setState({ menuOpen: !st.menuOpen }),
       sitTop: SIT.slice(0, 4).map(s => ({ t: s.t, pick: () => { if (mobile) return this.openFlow({ sit: s.id, sitPre: true, q1: '', q2: '', q3: '' }); this.setState({ sit: s.id, sitPre: true, q1: '', q2: '', step: st.from.trim() ? 2 : 1, sent: false }); this.scrollTo('calc'); } })),
-      sitRest: SIT.slice(4).map(s => ({ t: s.id === 'flip' ? 'Перевёрнута / повреждена' : s.t, pick: () => { if (mobile) return this.openFlow({ sit: s.id, sitPre: true, q1: '', q2: '', q3: '' }); this.setState({ sit: s.id, sitPre: true, q1: '', q2: '', step: st.from.trim() ? 2 : 1, sent: false }); this.scrollTo('calc'); } })),
-      stickyLabel: 'Вызвать эвакуатор',
+      sitRest: SIT.slice(4).map(s => ({ t: s.id === 'flip' ? 'Перевёрнута / повреждена' : s.t, pick: () => { if (mobile) return this.openFlow({ sit: s.id, sitPre: true, q1: '', q2: '', q3: '' }); this.setState({ sit: s.id, sitPre: true, q1: '', q2: '', step: st.from.trim() ? 2 : 1, sent: false }); this.scrollTo('calc'); } })),
+      stickyLabel: 'Вызвать эвакуатор',
       calcDisplay: mobile ? 'none' : 'block',
       ...this.flowVals(st, mobile, set),
       stickyAction: () => this.openFlow(), stickyOn: mobile && !st.flowOpen,
@@ -234,7 +234,7 @@ class Component extends DCLogic {
       onTo: e => this.setState({ to: e.target.value, toKind: '' }),
       onPhone: e => this.setState({ phone: e.target.value }),
       onLocate: this.locate,
-      locateLabel: st.locating ? 'Определяем…' : st.locErr ? 'Не получилось, введите адрес' : 'Определить, где я',
+      locateLabel: st.locating ? 'Определяем…' : st.locErr ? 'Не получилось, введите адрес' : 'Определить, где я',
       heroCall: () => { if (mobile) return this.openFlow(); this.setState({ step: st.from.trim() ? 2 : 1, sent: false }); this.scrollTo('calc'); },
       comment: st.comment, onComment: e => this.setState({ comment: e.target.value }),
       showComment: st.showComment, noComment: !st.showComment, toggleComment: set({ showComment: true }),
@@ -242,10 +242,10 @@ class Component extends DCLogic {
       showSitChip: !!st.sit && st.sitPre && st.step >= 1 && st.step <= 4, sitLabel: (SIT.find(x => x.id === st.sit) || {}).t || '',
       changeSit: set({ step: 3, sitPre: false }),
       receipt: [
-        { t: 'Подача', d: 'выезд экипажа к автомобилю', v: '1 500 ₽' },
+        { t: 'Подача', d: 'выезд экипажа к автомобилю', v: '1 500 ₽' },
         { t: 'Маршрут', d: '14 км по городу', v: '1 400 ₽' },
-        { t: 'Погрузка', d: 'заблокирована АКПП', v: '1 000 ₽' },
-        { t: 'Доп. оборудование', d: 'подкатные тележки', v: '900 ₽' }
+        { t: 'Погрузка', d: 'заблокирована АКПП', v: '1 000 ₽' },
+        { t: 'Доп. оборудование', d: 'подкатные тележки', v: '900 ₽' }
       ],
       goCalc: () => { if (mobile) return this.openFlow(); this.scrollTo('calc'); }, goCall: go('call'),
       districts: DISTRICTS.map(([name, slug, eta]) => ({ name, url: '/evakuator-' + slug + '-rayon/', eta: eta + ' мин' })),
@@ -257,57 +257,57 @@ class Component extends DCLogic {
       next: () => this.setState({ step: Math.min(5, st.step + (st.step === 2 && st.sit ? 2 : 1)) }),
       hasFrom: !!st.from.trim(), noFrom: !st.from.trim(), nextBg: st.from.trim() ? '#2350E6' : '#A9B9F2',
       eta: this.eta(),
-      fromChips: ['На КАД', 'На ЗСД', 'Ленобласть', 'Трасса М-10 / М-11'].map(t => ({ t, pick: set({ from: t + ', ' }) })),
+      fromChips: ['На КАД', 'На ЗСД', 'Ленобласть', 'Трасса М-10 / М-11'].map(t => ({ t, pick: set({ from: t + ', ' }) })),
       toOpts: TO.map(o => ({ ...o, ...sel(st.toKind === o.id), pick: set(Object.assign({ toKind: o.id, to: o.id === 'sto' ? st.to : o.t }, mobile ? { step: st.sit ? 4 : 3 } : {})) })),
       sitOpts: SIT.map(o => ({ t: o.t, ...sel(st.sit === o.id), pick: set({ sit: o.id, sitPre: false, step: 4, q1: '', q2: '' }) })),
       vehOpts: VEH.map(o => ({ t: o.t, ...sel(st.veh === o.id), pick: set(Object.assign({ veh: o.id }, mobile && !needQ1 && !needQ2 ? { step: 5 } : {})) })),
       showQ1: needQ1, showQ2: needQ2, q1: opt3('q1'), q2: opt3('q2'),
       noVeh: !st.veh, vehBg: st.veh ? '#2350E6' : '#A9B9F2',
       result: this.result(),
-      fromShow: st.from || 'уточнит диспетчер', toShow: st.to || 'решим с диспетчером',
+      fromShow: st.from || 'уточнит диспетчер', toShow: st.to || 'решим с диспетчером',
       sent: st.sent, notSent: !st.sent,
       send: () => { const n = st.phone.replace(/\D/g, '').length; if (n >= 10 && n <= 11) this.setState({ sent: true, phoneErr: false, fstep: st.flowOpen ? 6 : st.fstep }); else this.setState({ phoneErr: true }); },
       restart: set({ step: 1, sit: '', sitPre: false, veh: '', q1: '', q2: '', to: '', toKind: '', sent: false, comment: '', showComment: false }),
       factors: [
-        { n: '01', t: 'Подача', d: 'Выезд экипажа к автомобилю. За КАД по километражу.' },
-        { n: '02', t: 'Маршрут', d: 'Расстояние от места погрузки до точки выгрузки.' },
-        { n: '03', t: 'Тип автомобиля', d: 'Легковой, кроссовер, микроавтобус, грузовой: разная масса и платформа.' },
-        { n: '04', t: 'Состояние', d: 'На ходу, после ДТП, с заблокированными колёсами или рулём.' },
-        { n: '05', t: 'Сложность погрузки', d: 'Кювет, паркинг, низкий клиренс, работа манипулятора.' }
+        { n: '01', t: 'Подача', d: 'Выезд экипажа к автомобилю. За КАД по километражу.' },
+        { n: '02', t: 'Маршрут', d: 'Расстояние от места погрузки до точки выгрузки.' },
+        { n: '03', t: 'Тип автомобиля', d: 'Легковой, кроссовер, микроавтобус, грузовой: разная масса и платформа.' },
+        { n: '04', t: 'Состояние', d: 'На ходу, после ДТП, с заблокированными колёсами или рулём.' },
+        { n: '05', t: 'Сложность погрузки', d: 'Кювет, паркинг, низкий клиренс, работа манипулятора.' }
       ],
       prices: [
-        { t: 'Легковой автомобиль', d: 'по СПб, платформа' }, { t: 'Кроссовер / SUV', d: 'по СПб' },
-        { t: 'Подкатные тележки', d: 'доплата за заблокированные колёса' }, { t: 'Манипулятор', d: 'кювет, перевёрнутые авто' },
-        { t: 'Грузовой эвакуатор', d: 'от 3,5 т' }, { t: 'За КАД и межгород', d: 'за километр' }
+        { t: 'Легковой автомобиль', d: 'по СПб, платформа' }, { t: 'Кроссовер / SUV', d: 'по СПб' },
+        { t: 'Подкатные тележки', d: 'доплата за заблокированные колёса' }, { t: 'Манипулятор', d: 'кювет, перевёрнутые авто' },
+        { t: 'Грузовой эвакуатор', d: 'от 3,5 т' }, { t: 'За КАД и межгород', d: 'за километр' }
       ],
       complex: [
-        { p: 'Машина в кювете', s: 'Манипулятор поднимает стрелой, без протаскивания по грунту', link: 'Манипулятор →', url: '/manipulyator/' },
-        { p: 'Перевёрнута или на боку', s: 'Ставим на колёса стрелой и грузим на платформу', link: 'Сложная эвакуация →', url: '/slozhnaya-evakuaciya/' },
-        { p: 'После ДТП', s: 'Заберём с места, подскажем порядок действий и дадим документы для страховой', link: 'После ДТП →', url: '/posle-dtp/' },
-        { p: 'Нет колеса или сломана подвеска', s: 'Подкатные тележки или манипулятор по состоянию', link: 'Подкатные тележки →', url: '/evakuator-s-podkatnymi-telezhkami/' },
-        { p: 'Заблокированы колёса, руль, КПП', s: 'Ставим тележки под колёса, закатываем без волочения', link: 'Подкатные тележки →', url: '/evakuator-s-podkatnymi-telezhkami/' },
-        { p: 'Сложный доступ', s: 'Двор, узкий проезд, подземный паркинг: подберём технику по габаритам', link: 'Описать ситуацию →', url: '#call' }
-      ].concat(mobile ? [{ p: 'Нужен манипулятор', s: 'Погрузка стрелой без заезда на платформу и без волочения', url: '/manipulyator/' }] : []),
+        { p: 'Машина в кювете', s: 'Манипулятор поднимает стрелой, без протаскивания по грунту', link: 'Манипулятор →', url: '/manipulyator/' },
+        { p: 'Перевёрнута или на боку', s: 'Ставим на колёса стрелой и грузим на платформу', link: 'Сложная эвакуация →', url: '/slozhnaya-evakuaciya/' },
+        { p: 'После ДТП', s: 'Заберём с места, подскажем порядок действий и дадим документы для страховой', link: 'После ДТП →', url: '/posle-dtp/' },
+        { p: 'Нет колеса или сломана подвеска', s: 'Подкатные тележки или манипулятор по состоянию', link: 'Подкатные тележки →', url: '/evakuator-s-podkatnymi-telezhkami/' },
+        { p: 'Заблокированы колёса, руль, КПП', s: 'Ставим тележки под колёса, закатываем без волочения', link: 'Подкатные тележки →', url: '/evakuator-s-podkatnymi-telezhkami/' },
+        { p: 'Сложный доступ', s: 'Двор, узкий проезд, подземный паркинг: подберём технику по габаритам', link: 'Описать ситуацию →', url: '#call' }
+      ].concat(mobile ? [{ p: 'Нужен манипулятор', s: 'Погрузка стрелой без заезда на платформу и без волочения', url: '/manipulyator/' }] : []),
       caseMain: CASES[0], caseRest: CASES.slice(1), mini: MINI,
       process: ['Звонок', 'Расчёт', 'Подтверждение', 'Выезд', 'Погрузка', 'Доставка', 'Оплата'],
       fleet: [
-        { id: 'fleet-1', task: 'Стандартный легковой автомобиль', tech: 'Сдвижная платформа', ph: 'Фото: сдвижная платформа', url: '/ceny/' },
-        { id: 'fleet-2', task: 'Заблокированы колёса, руль, КПП', tech: 'Подкатные тележки', ph: 'Фото: тележки под колёсами', url: '/evakuator-s-podkatnymi-telezhkami/' },
-        { id: 'fleet-3', task: 'Кювет, перевёртыш, сложный доступ', tech: 'Манипулятор', ph: 'Фото: манипулятор в работе', url: '/manipulyator/' },
-        { id: 'fleet-4', task: 'Грузовой транспорт, спецтехника', tech: 'Грузовой эвакуатор', ph: 'Фото: грузовой эвакуатор', url: '/gruzovoy-evakuator/' }
+        { id: 'fleet-1', task: 'Стандартный легковой автомобиль', tech: 'Сдвижная платформа', ph: 'Фото: сдвижная платформа', url: '/ceny/' },
+        { id: 'fleet-2', task: 'Заблокированы колёса, руль, КПП', tech: 'Подкатные тележки', ph: 'Фото: тележки под колёсами', url: '/evakuator-s-podkatnymi-telezhkami/' },
+        { id: 'fleet-3', task: 'Кювет, перевёртыш, сложный доступ', tech: 'Манипулятор', ph: 'Фото: манипулятор в работе', url: '/manipulyator/' },
+        { id: 'fleet-4', task: 'Грузовой транспорт, спецтехника', tech: 'Грузовой эвакуатор', ph: 'Фото: грузовой эвакуатор', url: '/gruzovoy-evakuator/' }
       ],
       lo: ['Гатчина', 'Всеволожск', 'Пушкин', 'Колпино', 'Мурино', 'Кудрово'].map((name, i) => ({ name, url: '/lenoblast/' + ['gatchina', 'vsevolozhsk', 'pushkin', 'kolpino', 'murino', 'kudrovo'][i] + '/' })),
       faq: [
-        { q: 'Сколько стоит эвакуатор?', a: 'Зависит от подачи, маршрута, типа автомобиля, его состояния и сложности погрузки. Диспетчер назовёт стоимость до выезда. Если условия на месте соответствуют заявленным, сумма не меняется.' },
-        { q: 'Через сколько приедете?', a: 'Ориентир подачи по Петербургу 20–40 минут: в лучшем случае около 20, обычно около 30, в час пик до 40. Точное время диспетчер назовёт по адресу.' },
-        { q: 'Работаете ночью?', a: 'Да. Ночью ориентир подачи обычно даже меньше: дороги свободнее.' },
-        { q: 'Работаете 24/7?', a: 'Да, круглосуточно, в выходные и праздники тоже.' },
-        { q: 'Выезжаете за КАД?', a: 'Да, по всей Ленинградской области. Межгород до 150–200 км от Петербурга, стоимость считаем по маршруту заранее.' },
-        { q: 'Можно после ДТП?', a: 'Да. Заберём с места, подскажем порядок действий и дадим документы для страховой. Если автомобиль не катится, используем подкатные тележки или манипулятор.' },
-        { q: 'Что если колёса заблокированы?', a: 'Ничего делать не нужно, просто скажите об этом диспетчеру. Приедем с подкатными тележками и закатим машину на платформу без волочения.' },
-        { q: 'Можно ли ехать пассажиром?', a: 'Да, в кабине эвакуатора можно поехать вместе с автомобилем.' },
-        { q: 'Может ли измениться стоимость?', a: 'Только если ситуация на месте отличается от описанной, например, машина в кювете, а не на дороге. Тогда водитель предупредит до погрузки, и вы решите, продолжать ли.' },
-        { q: 'Кто отвечает, если машину повредят?', a: 'Мы. Ответственность компании застрахована, за автомобиль отвечаем от погрузки до выгрузки.' }
+        { q: 'Сколько стоит эвакуатор?', a: 'Зависит от подачи, маршрута, типа автомобиля, его состояния и сложности погрузки. Диспетчер назовёт стоимость до выезда. Если условия на месте соответствуют заявленным, сумма не меняется.' },
+        { q: 'Через сколько приедете?', a: 'Ориентир подачи по Петербургу 20–40 минут: в лучшем случае около 20, обычно около 30, в час пик до 40. Точное время диспетчер назовёт по адресу.' },
+        { q: 'Работаете ночью?', a: 'Да. Ночью ориентир подачи обычно даже меньше: дороги свободнее.' },
+        { q: 'Работаете 24/7?', a: 'Да, круглосуточно, в выходные и праздники тоже.' },
+        { q: 'Выезжаете за КАД?', a: 'Да, по всей Ленинградской области. Межгород до 150–200 км от Петербурга, стоимость считаем по маршруту заранее.' },
+        { q: 'Можно после ДТП?', a: 'Да. Заберём с места, подскажем порядок действий и дадим документы для страховой. Если автомобиль не катится, используем подкатные тележки или манипулятор.' },
+        { q: 'Что если колёса заблокированы?', a: 'Ничего делать не нужно, просто скажите об этом диспетчеру. Приедем с подкатными тележками и закатим машину на платформу без волочения.' },
+        { q: 'Можно ли ехать пассажиром?', a: 'Да, в кабине эвакуатора можно поехать вместе с автомобилем.' },
+        { q: 'Может ли измениться стоимость?', a: 'Только если ситуация на месте отличается от описанной, например, машина в кювете, а не на дороге. Тогда водитель предупредит до погрузки, и вы решите, продолжать ли.' },
+        { q: 'Кто отвечает, если машину повредят?', a: 'Мы. Ответственность компании застрахована, за автомобиль отвечаем от погрузки до выгрузки.' }
       ].map((f, i) => ({ ...f, open: i === 0 }))
     };
   }
