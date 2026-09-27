@@ -57,6 +57,36 @@
     </div>
   </div>
 
-  <p class="note">Черновик: цены, фото и кейсы пока примерные. С телефона удобнее открыть каждый вариант отдельно по ссылке под экраном.</p>
+  <p class="note">Черновик: цены, фото и кейсы пока примерные. Экраны листаются вместе. С телефона удобнее открыть каждый вариант отдельно по ссылке под экраном.</p>
+
+<script>
+/* синхронная прокрутка двух экранов: листаешь один — второй едет следом */
+(function(){
+  var frames = [].slice.call(document.querySelectorAll('.phone iframe'));
+  var lock = null;
+  function attach(f){
+    var w; try { w = f.contentWindow; w.document; } catch(e){ return; }
+    try {
+      var st = w.document.createElement('style');
+      st.textContent = 'html{scrollbar-width:none}html::-webkit-scrollbar{display:none}';
+      w.document.head.appendChild(st);
+    } catch(e){}
+    w.addEventListener('scroll', function(){
+      if (lock && lock !== f) return;
+      lock = f;
+      var y = w.scrollY;
+      frames.forEach(function(o){
+        if (o === f) return;
+        try { o.contentWindow.scrollTo({ top: y, behavior: 'instant' }); } catch(e){}
+      });
+      clearTimeout(attach.t); attach.t = setTimeout(function(){ lock = null; }, 120);
+    }, { passive: true });
+  }
+  frames.forEach(function(f){
+    f.addEventListener('load', function(){ attach(f); });
+    try { if (f.contentDocument && f.contentDocument.readyState === 'complete') attach(f); } catch(e){}
+  });
+})();
+</script>
 </body>
 </html>
