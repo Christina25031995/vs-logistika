@@ -8,9 +8,10 @@
 <style>.is-m dc-if[data-if="desktop"]{display:none!important}.is-m dc-if[data-if="mobile"][hidden]{display:contents!important}</style>
 <title>[жёлтый вариант] Эвакуатор в Санкт-Петербурге и Ленобласти 24/7 — ВС-Логистика</title>
 <meta name="description" content="Эвакуатор в СПб и Ленобласти 24/7. Ориентир подачи 20–40 минут. Платформа, подкатные тележки, манипулятор. Стоимость называем до выезда. Тел. 8 (812) 911-07-00.">
-<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon-yellow.png" type="image/png"><link rel="apple-touch-icon" href="../assets/favicon-yellow.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@900&text=%D0%92%D0%A1&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>html{scroll-behavior:smooth}body{margin:0;background:#F6F7F9;-webkit-font-smoothing:antialiased}*{box-sizing:border-box}a{color:#16191E;text-decoration:none}a:hover{color:#16191E}input{font:inherit}summary::-webkit-details-marker{display:none}button{font:inherit;cursor:pointer}
 dc-if{display:contents}dc-if[hidden]{display:none!important}
@@ -54,6 +55,9 @@ button{align-items:center;justify-content:center}
 <script>document.addEventListener('toggle',function(e){var d=e.target;if(!d.classList||!d.classList.contains('faq-q')||!d.open)return;document.querySelectorAll('details.faq-q[open]').forEach(function(o){if(o!==d)o.open=false;});},true);</script>
 <style>.is-m .case-map{display:none!important}</style>
 <style>
+/* знак в шапке: чёрный квадрат, жёлтые буквы (как логотип A) */
+.vs-mark-bg{fill:#16191F}.vs-mark-t{fill:#FFD400}
+
 /* === жёлтая тема: тёмный текст на жёлтом, жёлтый акцент в тёмных блоках === */
 [style*="background:#FFD400" i],[style*="background: #FFD400" i],[style*="background: rgb(255, 212, 0)"],[style*="background-color: rgb(255, 212, 0)"],
 [style*="background:#F3E3A0" i],[style*="background: rgb(243, 227, 160)"]{color:#16191F!important}
@@ -82,7 +86,7 @@ header.y-dark{background:rgba(17,18,20,.96)!important}
 <header style="position:sticky;top:0;z-index:20;background:rgba(255,255,255,0.95);backdrop-filter:blur(8px);border-bottom:1px solid #E3E6EB">
   <div style="max-width:1680px;margin:0 auto;padding:0 clamp(16px,3.4vw,56px);height:72px;display:flex;align-items:center;gap:28px" data-bind-style='{"height": "{{headerH}}", "gap": "{{headerGap}}"}'>
     <a href="/" style="display:flex;align-items:center;gap:10px;color:#16191F;flex:none;white-space:nowrap">
-      <span style="width:38px;height:38px;border-radius:10px;background:#FFD400;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;letter-spacing:-0.02em">ВС</span>
+      <span class="vs-mark" aria-hidden="true" style="width:38px;height:38px;border-radius:10px;overflow:hidden;display:block;flex:none"><svg viewBox="0 0 100 100" width="100%" height="100%" style="display:block"><defs><pattern id="vsHz" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="7" height="14" fill="#FFD400"/><rect x="7" width="7" height="14" fill="#16191F"/></pattern></defs><rect class="vs-mark-bg" width="100" height="100" fill="#FFD400"/><text class="vs-mark-t" x="50" y="58" text-anchor="middle" font-family="Unbounded,Onest,sans-serif" font-weight="900" font-size="36" fill="#fff" letter-spacing="-1.5">ВС</text><rect y="78" width="100" height="14" fill="url(#vsHz)"/></svg></span>
       <span style="display:flex;flex-direction:column;line-height:1.1"><span style="font-weight:700;font-size:17px">ВС-Логистика</span><dc-if data-if="mobile" hidden><span style="display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#1F7A45;padding-top:2px"><span style="width:6px;height:6px;border-radius:50%;background:#1F9D55"></span>24/7 · СПб и ЛО</span></dc-if><span style="font-size:12px;color:#4A515C;display:block" data-bind-style='{"display": "{{subDisplay}}"}'>эвакуатор · СПб и ЛО</span></span>
     </a>
     <dc-if data-if="wideNav">
