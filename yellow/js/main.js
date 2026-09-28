@@ -1,3 +1,4 @@
+const BUILT_D = ['primorskiy','moskovskiy','krasnoselskiy','vyborgskiy','nevskiy','kalininskiy','vasileostrovskiy','petrogradskiy']; // районы, у которых есть своя страница
 /* ВС-Логистика — логика главной страницы.
    Состояние и расчёт вызова — класс Component (ниже), без фреймворков.
    Разметка связана через data-атрибуты:
@@ -222,7 +223,7 @@ class Component extends DCLogic {
       ...this.flowVals(st, mobile, set),
       stickyAction: () => this.openFlow(), stickyOn: mobile && !st.flowOpen,
       goComplex: () => { if (mobile) return this.openFlow({ cx: true, sit: '', sitPre: false, q1: '', q2: '', q3: '', fstep: st.from.trim() ? 2 : 1 }); this.scrollTo('call'); },
-      districtsV: (mobile ? GEO_M.map(n => DISTRICTS.find(d => d[0] === n)) : DISTRICTS).map(([name, slug, eta]) => ({ name, url: '/evakuator-' + slug + '-rayon/', eta: eta + ' мин' })),
+      districtsV: (mobile ? GEO_M.map(n => DISTRICTS.find(d => d[0] === n)) : DISTRICTS).map(([name, slug, eta]) => ({ name, url: (BUILT_D.includes(slug) ? '../evakuator-' + slug + '-rayon/' : '../rayony/'), eta: eta + ' мин' })),
       stickyActionOld: () => {
         if (st.step === 5) { this.scrollTo('calc'); setTimeout(() => { const el = document.getElementById('calc-phone'); if (el) el.focus(); }, 450); return; }
         if (st.step > 1) { this.scrollTo('calc'); return; }
@@ -248,7 +249,7 @@ class Component extends DCLogic {
         { t: 'Доп. оборудование', d: 'подкатные тележки', v: '900 ₽' }
       ],
       goCalc: () => { if (mobile) return this.openFlow(); this.scrollTo('calc'); }, goCall: go('call'),
-      districts: DISTRICTS.map(([name, slug, eta]) => ({ name, url: '/evakuator-' + slug + '-rayon/', eta: eta + ' мин' })),
+      districts: DISTRICTS.map(([name, slug, eta]) => ({ name, url: (BUILT_D.includes(slug) ? '../evakuator-' + slug + '-rayon/' : '../rayony/'), eta: eta + ' мин' })),
       situations: SIT.map(s => ({ ...s, pick: () => { if (mobile) return this.openFlow({ sit: s.id, sitPre: true, q1: '', q2: '', q3: '' }); this.setState({ sit: s.id, sitPre: true, q1: '', q2: '', step: st.from.trim() ? 2 : 1, sent: false }); this.scrollTo('calc'); } })),
       s1: st.step === 1, s2: st.step === 2, s3: st.step === 3, s4: st.step === 4, s5: st.step === 5,
       canBack: st.step > 1, back: () => this.setState({ step: st.step === 4 && st.sit && st.sitPre ? 2 : Math.max(1, st.step - 1), sent: false }),
@@ -281,22 +282,22 @@ class Component extends DCLogic {
         { t: 'Грузовой эвакуатор', d: 'от 3,5 т' }, { t: 'За КАД и межгород', d: 'за километр' }
       ],
       complex: [
-        { p: 'Машина в кювете', s: 'Манипулятор поднимает стрелой, без протаскивания по грунту', link: 'Манипулятор →', url: '/manipulyator/' },
-        { p: 'Перевёрнута или на боку', s: 'Ставим на колёса стрелой и грузим на платформу', link: 'Сложная эвакуация →', url: '/slozhnaya-evakuaciya/' },
-        { p: 'После ДТП', s: 'Заберём с места, подскажем порядок действий и дадим документы для страховой', link: 'После ДТП →', url: '/posle-dtp/' },
-        { p: 'Нет колеса или сломана подвеска', s: 'Подкатные тележки или манипулятор по состоянию', link: 'Подкатные тележки →', url: '/evakuator-s-podkatnymi-telezhkami/' },
-        { p: 'Заблокированы колёса, руль, КПП', s: 'Ставим тележки под колёса, закатываем без волочения', link: 'Подкатные тележки →', url: '/evakuator-s-podkatnymi-telezhkami/' },
+        { p: 'Машина в кювете', s: 'Манипулятор поднимает стрелой, без протаскивания по грунту', link: 'Манипулятор →', url: '../manipulyator/' },
+        { p: 'Перевёрнута или на боку', s: 'Ставим на колёса стрелой и грузим на платформу', link: 'Сложная эвакуация →', url: '../slozhnaya-evakuaciya/' },
+        { p: 'После ДТП', s: 'Заберём с места, подскажем порядок действий и дадим документы для страховой', link: 'После ДТП →', url: '../posle-dtp/' },
+        { p: 'Нет колеса или сломана подвеска', s: 'Подкатные тележки или манипулятор по состоянию', link: 'Подкатные тележки →', url: '../evakuator-s-podkatnymi-telezhkami/' },
+        { p: 'Заблокированы колёса, руль, КПП', s: 'Ставим тележки под колёса, закатываем без волочения', link: 'Подкатные тележки →', url: '../evakuator-s-podkatnymi-telezhkami/' },
         { p: 'Сложный доступ', s: 'Двор, узкий проезд, подземный паркинг: подберём технику по габаритам', link: 'Описать ситуацию →', url: '#call' }
-      ].concat(mobile ? [{ p: 'Нужен манипулятор', s: 'Погрузка стрелой без заезда на платформу и без волочения', url: '/manipulyator/' }] : []),
+      ].concat(mobile ? [{ p: 'Нужен манипулятор', s: 'Погрузка стрелой без заезда на платформу и без волочения', url: '../manipulyator/' }] : []),
       caseMain: CASES[0], caseRest: CASES.slice(1), mini: MINI,
       process: ['Звонок', 'Расчёт', 'Подтверждение', 'Выезд', 'Погрузка', 'Доставка', 'Оплата'],
       fleet: [
-        { id: 'fleet-1', task: 'Стандартный легковой автомобиль', tech: 'Сдвижная платформа', ph: 'Фото: сдвижная платформа', url: '/ceny/' },
-        { id: 'fleet-2', task: 'Заблокированы колёса, руль, КПП', tech: 'Подкатные тележки', ph: 'Фото: тележки под колёсами', url: '/evakuator-s-podkatnymi-telezhkami/' },
-        { id: 'fleet-3', task: 'Кювет, перевёртыш, сложный доступ', tech: 'Манипулятор', ph: 'Фото: манипулятор в работе', url: '/manipulyator/' },
-        { id: 'fleet-4', task: 'Грузовой транспорт, спецтехника', tech: 'Грузовой эвакуатор', ph: 'Фото: грузовой эвакуатор', url: '/gruzovoy-evakuator/' }
+        { id: 'fleet-1', task: 'Стандартный легковой автомобиль', tech: 'Сдвижная платформа', ph: 'Фото: сдвижная платформа', url: '../ceny/' },
+        { id: 'fleet-2', task: 'Заблокированы колёса, руль, КПП', tech: 'Подкатные тележки', ph: 'Фото: тележки под колёсами', url: '../evakuator-s-podkatnymi-telezhkami/' },
+        { id: 'fleet-3', task: 'Кювет, перевёртыш, сложный доступ', tech: 'Манипулятор', ph: 'Фото: манипулятор в работе', url: '../manipulyator/' },
+        { id: 'fleet-4', task: 'Грузовой транспорт, спецтехника', tech: 'Грузовой эвакуатор', ph: 'Фото: грузовой эвакуатор', url: '#fleet' }
       ],
-      lo: ['Гатчина', 'Всеволожск', 'Пушкин', 'Колпино', 'Мурино', 'Кудрово'].map((name, i) => ({ name, url: '/lenoblast/' + ['gatchina', 'vsevolozhsk', 'pushkin', 'kolpino', 'murino', 'kudrovo'][i] + '/' })),
+      lo: ['Гатчина', 'Всеволожск', 'Пушкин', 'Колпино', 'Мурино', 'Кудрово'].map((name, i) => ({ name, url: '../lenoblast/' + ['gatchina', 'vsevolozhsk', 'pushkin', 'kolpino', 'murino', 'kudrovo'][i] + '/' })),
       faq: [
         { q: 'Сколько стоит эвакуатор?', a: 'Зависит от подачи, маршрута, типа автомобиля, его состояния и сложности погрузки. Диспетчер назовёт стоимость до выезда. Если условия на месте соответствуют заявленным, сумма не меняется.' },
         { q: 'Через сколько приедете?', a: 'Ориентир подачи по Петербургу 20–40 минут: в лучшем случае около 20, обычно около 30, в час пик до 40. Точное время диспетчер назовёт по адресу.' },
