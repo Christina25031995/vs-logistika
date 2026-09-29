@@ -139,3 +139,13 @@ h1{font-size:clamp(32px,4.2vw,54px);line-height:1.06;font-weight:700}
   .mbar{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-top:1px solid var(--ln)}
   .mbar .btn{height:52px;border-radius:14px;font-size:16px}
 }
+
+/* раздел «Советы» */
+.byline{margin:18px 0 0;font-size:14.5px;color:var(--mut2)}
+.pills[hidden]{display:none}
+.arts{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:14px}
+.art{background:#fff;border:1px solid var(--ln);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;color:var(--ink)}
+.art:hover{border-color:var(--b);color:var(--ink)}
+.art img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;background:var(--ln)}
+.art-t{display:flex;flex-direction:column;gap:8px;padding:18px 20px 20px}
+.art-t b{font-size:19px;line-height:1.25}.art-t span{color:var(--mut);font-size:15px}.art-t small{color:var(--mut2);font-size:13px;margin-top:auto}
