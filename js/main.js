@@ -1,4 +1,4 @@
-const BUILT_D = ['primorskiy','moskovskiy','krasnoselskiy','vyborgskiy','nevskiy','kalininskiy','vasileostrovskiy','petrogradskiy']; // районы, у которых есть своя страница
+const BUILT_D = ['primorskiy','moskovskiy','krasnoselskiy','vyborgskiy','nevskiy','kalininskiy','vasileostrovskiy','petrogradskiy','centralnyy','admiralteyskiy','kirovskiy','frunzenskiy','krasnogvardeyskiy']; // районы, у которых есть своя страница
 /* ВС-Логистика — логика главной страницы.
    Состояние и расчёт вызова — класс Component (ниже), без фреймворков.
    Разметка связана через data-атрибуты:
@@ -295,7 +295,7 @@ class Component extends DCLogic {
         { id: 'fleet-1', task: 'Стандартный легковой автомобиль', tech: 'Сдвижная платформа', ph: 'Фото: сдвижная платформа', url: 'ceny/' },
         { id: 'fleet-2', task: 'Заблокированы колёса, руль, КПП', tech: 'Подкатные тележки', ph: 'Фото: тележки под колёсами', url: 'evakuator-s-podkatnymi-telezhkami/' },
         { id: 'fleet-3', task: 'Кювет, перевёртыш, сложный доступ', tech: 'Манипулятор', ph: 'Фото: манипулятор в работе', url: 'manipulyator/' },
-        { id: 'fleet-4', task: 'Грузовой транспорт, спецтехника', tech: 'Грузовой эвакуатор', ph: 'Фото: грузовой эвакуатор', url: '#fleet' }
+        { id: 'fleet-4', task: 'Грузовой транспорт, спецтехника', tech: 'Грузовой эвакуатор', ph: 'Фото: грузовой эвакуатор', url: 'gruzovoy-evakuator/' }
       ],
       lo: ['Гатчина', 'Всеволожск', 'Пушкин', 'Колпино', 'Мурино', 'Кудрово'].map((name, i) => ({ name, url: 'lenoblast/' + ['gatchina', 'vsevolozhsk', 'pushkin', 'kolpino', 'murino', 'kudrovo'][i] + '/' })),
       faq: [
