@@ -267,7 +267,8 @@ class Component extends DCLogic {
       result: this.result(),
       fromShow: st.from || 'уточнит диспетчер', toShow: st.to || 'решим с диспетчером',
       sent: st.sent, notSent: !st.sent,
-      send: () => { const n = st.phone.replace(/\D/g, '').length; if (n >= 10 && n <= 11) this.setState({ sent: true, phoneErr: false, fstep: st.flowOpen ? 6 : st.fstep }); else this.setState({ phoneErr: true }); },
+      send: () => { const n = st.phone.replace(/\D/g, '').length; if (!(n >= 10 && n <= 11)) return this.setState({ phoneErr: true }); if (!st.agree) return this.setState({ agreeErr: true, phoneErr: false }); this.setState({ sent: true, phoneErr: false, agreeErr: false, fstep: st.flowOpen ? 6 : st.fstep }); if (window.vslGoal) window.vslGoal('lead'); },
+      agree: !!st.agree, agreeErr: !!st.agreeErr, onAgree: e => this.setState({ agree: e.target.checked, agreeErr: false }),
       restart: set({ step: 1, sit: '', sitPre: false, veh: '', q1: '', q2: '', to: '', toKind: '', sent: false, comment: '', showComment: false }),
       factors: [
         { n: '01', t: 'Подача', d: 'Выезд экипажа к автомобилю. За КАД по километражу.' },
@@ -336,7 +337,7 @@ function update() {
     for (const a in m) {
       const v = get(vals, m[a]);
       if (a === 'value') { const s = v == null ? '' : String(v); if (el.value !== s) el.value = s; }
-      else if (a === 'disabled' || a === 'open' || a === 'hidden') el[a] = !!v;
+      else if (a === 'disabled' || a === 'open' || a === 'hidden' || a === 'checked') el[a] = !!v;
       else el.setAttribute(a, v == null ? '' : v);
     }
   });

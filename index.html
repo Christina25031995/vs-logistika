@@ -54,6 +54,8 @@ button{align-items:center;justify-content:center}
 </style>
 <script>document.addEventListener('toggle',function(e){var d=e.target;if(!d.classList||!d.classList.contains('faq-q')||!d.open)return;document.querySelectorAll('details.faq-q[open]').forEach(function(o){if(o!==d)o.open=false;});},true);</script>
 <style>.is-m .case-map{display:none!important}</style>
+<link rel="stylesheet" href="assets/legal/legal.css">
+<script src="assets/legal/legal.js" defer></script>
 </head>
 <body>
 
@@ -366,6 +368,7 @@ button{align-items:center;justify-content:center}
               <input id="calc-phone" value="" data-on-input="onPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" style="width:100%;min-width:0;height:56px;border:1.5px solid #CDD3DC;border-radius:14px;padding:0 16px;font-size:17px;outline:none" data-bind-attr='{"value": "phone"}' data-bind-style='{"border": "1.5px solid {{phoneBd}}"}'>
               <dc-if data-if="phoneErr" hidden><span style="font-size:13px;color:#C8342B">Проверьте номер: нужно 10–11 цифр</span></dc-if>
               <dc-if data-if="showComment" hidden><input value="" data-on-input="onComment" placeholder="Комментарий (необязательно)" style="height:52px;border:1.5px solid #CDD3DC;border-radius:14px;padding:0 16px;font-size:15px;outline:none;width:100%" data-bind-attr='{"value": "comment"}'></dc-if>
+              <label class="consent"><input type="checkbox" data-on-input="onAgree" data-bind-attr='{"checked": "agree"}'><span>Согласен на&nbsp;<a href="soglasie/" target="_blank">обработку персональных данных</a> по&nbsp;<a href="privacy/" target="_blank">политике</a></span></label><dc-if data-if="agreeErr" hidden><span class="consent-err">Отметьте согласие, чтобы отправить заявку</span></dc-if>
               <button data-action="send" style="height:56px;border-radius:14px;border:1.5px solid #16191F;background:#fff;font-weight:700;font-size:17px;color:#16191F">Отправить заявку</button>
               <dc-if data-if="noComment"><button data-action="toggleComment" style="align-self:center;border:0;background:none;padding:0 10px;min-height:44px;font-size:14px;font-weight:600;color:#2350E6">+ Добавить комментарий</button></dc-if>
             </div>
@@ -857,6 +860,7 @@ button{align-items:center;justify-content:center}
           <input value="" data-on-input="onPhone" type="tel" placeholder="+7 (___) ___-__-__" style="flex:1 1 220px;height:58px;border:0;border-radius:12px;padding:0 18px;font-size:17px;outline:none;color:#16191F" data-bind-attr='{"value": "phone"}'>
           <button data-action="send" style="flex:1 1 160px;height:58px;border-radius:12px;border:0;background:#16191F;color:#fff;font-weight:600;font-size:16px">Перезвоните мне</button>
         </div>
+        <label class="consent consent-w"><input type="checkbox" data-on-input="onAgree" data-bind-attr='{"checked": "agree"}'><span>Согласен на&nbsp;<a href="soglasie/" target="_blank">обработку персональных данных</a> по&nbsp;<a href="privacy/" target="_blank">политике</a></span></label><dc-if data-if="agreeErr" hidden><span class="consent-err consent-w">Отметьте согласие, чтобы отправить заявку</span></dc-if>
       </dc-if>
       <dc-if data-if="sent" hidden><div style="background:#fff;color:#17603A;border-radius:12px;padding:16px;font-size:16px">Заявка принята. Диспетчер скоро перезвонит.</div></dc-if>
       <dc-if data-if="mobile" hidden><div style="display:flex;flex-direction:column;gap:2px;padding-top:8px"><span style="font-size:15px;color:#DCE5FF">Или позвоните сейчас</span><a href="tel:+78129110700" style="color:#fff;font-size:26px;font-weight:700;letter-spacing:-0.02em;white-space:nowrap;font-variant-numeric:tabular-nums">8 (812) 911-07-00</a></div></dc-if><div style="display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline"><dc-if data-if="desktop"><a href="tel:+78129110700" style="color:#fff;font-size:18px;font-weight:700;white-space:nowrap">или звоните: 8 (812) 911-07-00</a></dc-if><a href="https://wa.me/79052131033" style="color:#DCE5FF;font-size:15px;font-weight:600;white-space:nowrap">WhatsApp / Telegram: 8 (905) 213-10-33</a></div><span style="font-size:14px;color:#DCE5FF">Принимаем вызовы круглосуточно, 24/7.</span>
@@ -872,6 +876,7 @@ button{align-items:center;justify-content:center}
     <div style="display:flex;flex-direction:column;gap:4px"><span style="color:#fff;font-weight:600">География</span><a href="rayony/" style="color:#C4C9D2">Районы СПб</a><a href="lenoblast/" style="color:#C4C9D2">Ленобласть</a><a href="evakuator-kad/" style="color:#C4C9D2">КАД</a><a href="evakuator-zsd/" style="color:#C4C9D2">ЗСД</a></div>
     <div style="display:flex;flex-direction:column;gap:4px"><span style="color:#fff;font-weight:600">Компания</span><a href="ceny/" style="color:#C4C9D2">Цены</a><a href="sovety/" style="color:#C4C9D2">Советы</a><a href="#cases" style="color:#C4C9D2">Эвакуации</a><a href="business/" style="color:#C4C9D2">Бизнесу</a><a href="about/" style="color:#C4C9D2">О компании</a><a href="#faq" style="color:#C4C9D2">Вопросы</a><a href="contacts/" style="color:#C4C9D2">Контакты</a></div>
   </div>
+<div class="ft-legal"><span>© 2026 ВС-Логистика · ИП Багдасаров В.А.</span><a href="privacy/">Политика обработки персональных данных</a><a href="soglasie/">Согласие на обработку данных</a><a href="cookies/">Политика cookie</a><a href="#" data-cookie-settings>Настройки cookie</a></div>
 </footer>
 
 
@@ -1002,6 +1007,7 @@ button{align-items:center;justify-content:center}
         <div style="display:flex;flex-direction:column;gap:8px;border-top:1px solid #EEF0F3;padding-top:14px">
           <label for="flow-phone" style="font-size:16px;font-weight:700">Телефон для связи</label>
           <input id="flow-phone" value="" data-on-input="onPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" style="height:56px;border:1.5px solid #CDD3DC;border-radius:14px;padding:0 16px;font-size:18px;outline:none;width:100%;min-width:0;background:#fff" data-bind-attr='{"value": "phone"}' data-bind-style='{"border": "1.5px solid {{phoneBd}}"}'>
+          <label class="consent"><input type="checkbox" data-on-input="onAgree" data-bind-attr='{"checked": "agree"}'><span>Согласен на&nbsp;<a href="soglasie/" target="_blank">обработку персональных данных</a> по&nbsp;<a href="privacy/" target="_blank">политике</a></span></label><dc-if data-if="agreeErr" hidden><span class="consent-err">Отметьте согласие, чтобы отправить заявку</span></dc-if>
           <dc-if data-if="phoneErr" hidden><span style="font-size:13px;color:#C8342B">Проверьте номер: нужно 10–11 цифр</span></dc-if>
           <dc-if data-if="showComment" hidden><input value="" data-on-input="onComment" placeholder="Комментарий (необязательно)" style="height:52px;border:1.5px solid #CDD3DC;border-radius:14px;padding:0 16px;font-size:15px;outline:none;width:100%;background:#fff" data-bind-attr='{"value": "comment"}'></dc-if>
           <dc-if data-if="noComment"><button data-action="toggleComment" style="align-self:flex-start;border:0;background:none;min-height:44px;padding:0 4px;font-size:14px;font-weight:600;color:#2350E6">+ Добавить комментарий</button></dc-if>
