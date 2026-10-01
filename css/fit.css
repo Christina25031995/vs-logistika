@@ -31,3 +31,7 @@
   header nav{gap:18px!important}
 }
 @media (min-width:820px) and (max-width:1180px){header div[style*="margin-left:auto"]>a[href^="tel:"]{display:none!important}}
+/* анкета «Рассчитать вызов»: экран результата в один экран */
+@media (min-width:820px){
+  :root:not(.is-m) #calc>div{padding-top:clamp(20px,2vw,32px)!important;padding-bottom:clamp(20px,2vw,32px)!important}
+}

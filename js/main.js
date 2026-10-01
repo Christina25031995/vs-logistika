@@ -149,10 +149,12 @@ class Component extends DCLogic {
     else if (sit === 'low') { tech = 'Платформа с пологим заездом'; why = 'Низкий угол погрузки и мягкие крепления за колёса, без касания бампера и обвеса.'; }
     else if (veh === 'moto') { tech = 'Платформа с креплением для мото'; why = 'Мотоцикл фиксируется в стойке и ремнями за раму.'; }
     else if (sit === 'other') { tech = 'Подберём по описанию'; why = 'Позвоните или оставьте номер, и диспетчер задаст пару вопросов и назовёт подходящую технику.'; }
+    const PL = 'от 3 500 ₽ + 80 ₽⁠/⁠км';
+    const price = { 'Грузовой эвакуатор': 'от 12 000 ₽ + 200 ₽⁠/⁠км', 'Манипулятор': 'от 8 000 ₽ + 100 ₽⁠/⁠км', 'Платформа + подкатные тележки': PL + ' + тележки от 350 ₽', 'Подберём по описанию': 'назовём по телефону' }[tech] || PL;
     const eta = (sit === 'ditch' || sit === 'flip') ? '≈30⁠–⁠40 мин' : this.eta();
     const f = this.state.from.toLowerCase();
     const dm = DISTRICTS.find(([n]) => f.includes(n.slice(0, 5).toLowerCase()));
-    return { tech, why, eta, district: dm ? dm[0] : 'уточнит диспетчер', summary: s.t + (v ? ' · ' + v.t : '') };
+    return { tech, why, eta, price, district: dm ? dm[0] : 'уточнит диспетчер', summary: s.t + (v ? ' · ' + v.t : '') };
   }
   flowVals(st, mobile, set) {
     const fs = st.fstep, res = st.fResume;
@@ -264,7 +266,7 @@ class Component extends DCLogic {
       vehOpts: VEH.map(o => ({ t: o.t, ...sel(st.veh === o.id), pick: set(Object.assign({ veh: o.id }, mobile && !needQ1 && !needQ2 ? { step: 5 } : {})) })),
       showQ1: needQ1, showQ2: needQ2, q1: opt3('q1'), q2: opt3('q2'),
       noVeh: !st.veh, vehBg: st.veh ? '#2350E6' : '#A9B9F2',
-      result: this.result(),
+      result: this.result(), isResult: st.step === 5, notResult: st.step !== 5, edit: set({ step: 1, sent: false }),
       fromShow: st.from || 'уточнит диспетчер', toShow: st.to || 'решим с диспетчером',
       sent: st.sent, notSent: !st.sent,
       send: () => { const n = st.phone.replace(/\D/g, '').length; if (!(n >= 10 && n <= 11)) return this.setState({ phoneErr: true }); if (!st.agree) return this.setState({ agreeErr: true, phoneErr: false }); this.setState({ sent: true, phoneErr: false, agreeErr: false, fstep: st.flowOpen ? 6 : st.fstep }); if (window.vslGoal) window.vslGoal('lead'); },
