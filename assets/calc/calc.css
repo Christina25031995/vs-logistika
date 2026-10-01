@@ -50,3 +50,11 @@
 .vsc-call{text-align:center;padding:0 16px}
 @media (max-width:480px){.vsc-types{grid-template-columns:1fr}.vsc-call,.vsc-reset{flex:1 1 100%;min-width:0}}
 .vsc-ph{white-space:nowrap}
+.vsc-addr{display:flex;gap:8px}
+.vsc-addr input{flex:1;min-width:0;height:50px;border:1.5px solid #D3D8E0;border-radius:12px;padding:0 14px;font:500 16px 'Onest',system-ui,sans-serif;color:var(--ink);background:#fff}
+.vsc-addr input:focus{outline:none;border-color:var(--b)}
+.vsc-geo{flex:none;height:50px;padding:0 14px;border:0;border-radius:12px;background:var(--tint);color:var(--bh);font:600 15px 'Onest',system-ui,sans-serif;cursor:pointer}
+.vsc-geo:hover{background:#DCE5FF}
+.vsc-rst{font-size:13.5px;font-weight:600;color:#17603A;min-height:1px}
+.vsc-rst.vsc-bad{color:#B42318}
+.ymaps-2-1-79-search__suggest,[class*="search__suggest"]{z-index:40!important}

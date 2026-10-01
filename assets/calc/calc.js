@@ -12,11 +12,45 @@
   ];
   var WHEEL = 350, ROW = 800, PARKING = 12000, DEF_KM = 10;
 
+  /* Километры по адресам через Яндекс Карты. Пока ключей нет, человек вписывает км сам.
+     Как только ключи вставлены, появляются поля «Откуда / Куда» и км считаются по дорогам.
+     Ключи получает владелец в кабинете разработчика Яндекса (developer.tech.yandex.ru):
+     YMAPS_KEY — «JavaScript API и HTTP Геокодер», SUGGEST_KEY — «API Геосаджеста» (подсказки адресов, можно не ставить).
+     В настройках ключа указать домен сайта. */
+  var YMAPS_KEY = '';
+  var SUGGEST_KEY = '';
+  var CFG = window.VSC_CONFIG || {};
+  if (CFG.ymapsKey) YMAPS_KEY = CFG.ymapsKey;
+  if (CFG.suggestKey) SUGGEST_KEY = CFG.suggestKey;
+  var BOUNDS = [[58.4, 27.7], [61.4, 35.7]]; // СПб и Ленобласть: адреса ищем сначала здесь
+
+  var ymapsP = null;
+  function loadYmaps() {
+    if (ymapsP) return ymapsP;
+    ymapsP = new Promise(function (ok, fail) {
+      if (window.ymaps) return window.ymaps.ready(function () { ok(window.ymaps); });
+      var sc = document.createElement('script');
+      sc.src = 'https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=' + encodeURIComponent(YMAPS_KEY) + (SUGGEST_KEY ? '&suggest_apikey=' + encodeURIComponent(SUGGEST_KEY) : '');
+      sc.async = true;
+      sc.onload = function () { window.ymaps.ready(function () { ok(window.ymaps); }); };
+      sc.onerror = function () { ymapsP = null; fail(new Error('ymaps')); };
+      document.head.appendChild(sc);
+    });
+    return ymapsP;
+  }
+  function geocode(ym, q) {
+    if (Array.isArray(q)) return Promise.resolve(q);
+    return ym.geocode(q, { boundedBy: BOUNDS, results: 1 }).then(function (r) {
+      var g = r.geoObjects.get(0); if (!g) throw new Error('nf'); return g.geometry.getCoordinates();
+    });
+  }
+
   function rub(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, NB) + NB + '₽'; }
   function h(tag, cls, html) { var el = document.createElement(tag); if (cls) el.className = cls; if (html != null) el.innerHTML = html; return el; }
 
   function mount(root, n) {
     var st = { type: 'car', km: DEF_KM, wheels: 0, row: false, park: false, ditch: false };
+    var ROUTE = !!YMAPS_KEY, fromGeo = null, reqId = 0, tmr = null;
     var tel = root.getAttribute('data-tel') || 'tel:+78129110700';
     var phone = root.getAttribute('data-phone') || '8 (812) 911-07-00';
     root.classList.add('vsc');
@@ -27,11 +61,16 @@
         return '<label class="vsc-type"><input type="radio" name="vsc-t' + n + '" value="' + x.id + '"' + (x.id === st.type ? ' checked' : '') + '>' +
           '<span><b>' + x.t + '</b><small>от ' + rub(x.base) + ' + ' + x.km + NB + '₽/км</small></span></label>';
       }).join('') + '</div></fieldset>' +
+      (ROUTE ? '<div class="vsc-f vsc-route"><span class="vsc-l">Маршрут <small>посчитаем километры по дорогам</small></span>' +
+        '<div class="vsc-addr"><input type="text" class="vsc-from" autocomplete="off" placeholder="Где стоит машина" aria-label="Где стоит машина: адрес или место">' +
+        '<button type="button" class="vsc-geo">Я здесь</button></div>' +
+        '<div class="vsc-addr"><input type="text" class="vsc-to" autocomplete="off" placeholder="Куда везём" aria-label="Куда везём: адрес"></div>' +
+        '<small class="vsc-rst" aria-live="polite"></small></div>' : '') +
       '<div class="vsc-f"><span class="vsc-l" id="vsc-kml' + n + '">Расстояние, км <small class="vsc-rate"></small></span>' +
       '<div class="vsc-km"><button type="button" class="vsc-step" data-d="-1" aria-label="Меньше на 1 км">−</button>' +
       '<input type="number" inputmode="numeric" min="0" max="2000" value="' + st.km + '" aria-labelledby="vsc-kml' + n + '">' +
       '<button type="button" class="vsc-step" data-d="1" aria-label="Больше на 1 км">+</button></div>' +
-      '<small class="vsc-hint">От места, где стоит машина, до места, куда везём</small></div>' +
+      '<small class="vsc-hint">' + (ROUTE ? 'Посчитается по адресам, можно поправить вручную' : 'От места, где стоит машина, до места, куда везём') + '</small></div>' +
       '<div class="vsc-f vsc-wh"><span class="vsc-l">Заблокированные колёса <small>' + WHEEL + NB + '₽ за тележку</small></span>' +
       '<div class="vsc-seg" role="radiogroup">' + [0, 1, 2, 3, 4].map(function (i) {
         return '<button type="button" role="radio" data-w="' + i + '" aria-checked="' + (i === 0) + '">' + i + '</button>';
@@ -47,6 +86,45 @@
       '<div class="vsc-ctas"><a class="vsc-call" href="' + tel + '">Позвонить<span class="vsc-ph">' + NB + phone + '</span></a><button type="button" class="vsc-reset">Сбросить</button></div>';
 
     var kmIn = root.querySelector('.vsc-km input');
+    var fromIn = root.querySelector('.vsc-from'), toIn = root.querySelector('.vsc-to'), rst = root.querySelector('.vsc-rst');
+    function status(t, bad) { if (rst) { rst.textContent = t; rst.classList.toggle('vsc-bad', !!bad); } }
+    function route() {
+      clearTimeout(tmr);
+      var a = fromGeo || fromIn.value.trim(), b = toIn.value.trim();
+      if (!a || !b) return;
+      var id = ++reqId;
+      status('Считаем маршрут…');
+      loadYmaps().then(function (ym) {
+        return Promise.all([geocode(ym, a), geocode(ym, b)]).then(function (pts) { return ym.route(pts); });
+      }).then(function (r) {
+        if (id !== reqId) return;
+        st.km = Math.max(1, Math.ceil(r.getLength() / 1000)); kmIn.value = st.km;
+        status('По дорогам ' + st.km + NB + 'км'); draw();
+      }, function () {
+        if (id !== reqId) return;
+        status('Не нашли адрес. Уточните его или впишите километры ниже', true);
+      });
+    }
+    function later() { clearTimeout(tmr); tmr = setTimeout(route, 700); }
+    if (ROUTE) {
+      var sugg = false;
+      var warm = function () {
+        loadYmaps().then(function (ym) {
+          if (sugg || !SUGGEST_KEY || !ym.SuggestView) return; sugg = true;
+          [fromIn, toIn].forEach(function (inp) {
+            var sv = new ym.SuggestView(inp, { boundedBy: BOUNDS });
+            sv.events.add('select', function () { if (inp === fromIn) fromGeo = null; setTimeout(route, 0); });
+          });
+        }, function () { status('Карты не загрузились, впишите километры ниже', true); });
+      };
+      fromIn.addEventListener('focus', warm); toIn.addEventListener('focus', warm);
+      fromIn.addEventListener('input', function () { fromGeo = null; later(); });
+      toIn.addEventListener('input', later);
+      [fromIn, toIn].forEach(function (inp) {
+        inp.addEventListener('change', route);
+        inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); route(); } });
+      });
+    }
     function type() { for (var i = 0; i < TYPES.length; i++) if (TYPES[i].id === st.type) return TYPES[i]; return TYPES[0]; }
 
     function draw() {
@@ -81,10 +159,20 @@
       var b = e.target.closest('button'); if (!b || !root.contains(b)) return;
       if (b.hasAttribute('data-d')) { st.km = Math.max(0, Math.min(2000, st.km + +b.getAttribute('data-d'))); kmIn.value = st.km; }
       else if (b.hasAttribute('data-w')) st.wheels = +b.getAttribute('data-w');
+      else if (b.classList.contains('vsc-geo')) {
+        if (!navigator.geolocation) { status('Телефон не даёт местоположение, впишите адрес', true); return; }
+        status('Определяем, где вы…');
+        navigator.geolocation.getCurrentPosition(function (p) {
+          fromGeo = [p.coords.latitude, p.coords.longitude]; fromIn.value = 'Моё местоположение';
+          if (toIn.value.trim()) route(); else { status('Теперь впишите, куда везём'); toIn.focus(); }
+        }, function () { status('Не получилось определить место, впишите адрес', true); }, { enableHighAccuracy: true, timeout: 10000 });
+        return;
+      }
       else if (b.classList.contains('vsc-reset')) {
         st = { type: 'car', km: DEF_KM, wheels: 0, row: false, park: false, ditch: false }; kmIn.value = DEF_KM;
         root.querySelectorAll('input[type=checkbox]').forEach(function (c) { c.checked = false; });
         root.querySelector('input[value=car]').checked = true;
+        if (ROUTE) { fromIn.value = toIn.value = ''; fromGeo = null; reqId++; status(''); }
       } else return;
       draw();
     });
