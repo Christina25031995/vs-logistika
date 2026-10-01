@@ -149,3 +149,19 @@ h1{font-size:clamp(32px,4.2vw,54px);line-height:1.06;font-weight:700}
 .art img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;background:var(--ln)}
 .art-t{display:flex;flex-direction:column;gap:8px;padding:18px 20px 20px}
 .art-t b{font-size:19px;line-height:1.25}.art-t span{color:var(--mut);font-size:15px}.art-t small{color:var(--mut2);font-size:13px;margin-top:auto}
+
+/* аудит 01.10: фото-оценка, отзывы, переносы в заголовках на узких экранах */
+.photo-cta{font-size:14px;color:var(--mut2);margin:8px 0 0}.photo-cta a{font-weight:600}
+.sec-rev{background:var(--bg)}
+.rev-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 24px;margin-bottom:20px}.rev-head h2{margin:0!important}
+.rev-all{font-weight:600;font-size:15px}
+.revs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px}
+.rev{margin:0;background:#fff;border:1px solid var(--ln);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.rev blockquote{margin:0;font-size:16px;line-height:1.55;color:var(--ink)}
+.rev figcaption{font-size:14px;color:var(--mut2)}.rev figcaption b{color:var(--ink);font-weight:600}
+@media (max-width:420px){h1 .nw{white-space:normal}}
+@media (max-width:360px){
+  .hd-in{gap:8px}.brand{gap:8px}.brand-t b{font-size:15px}.brand-t small{display:none}
+  h1{font-size:28px;overflow-wrap:anywhere;hyphens:auto}
+  .mbar .btn{padding:0 10px;font-size:15px}
+}

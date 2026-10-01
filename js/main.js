@@ -218,7 +218,7 @@ class Component extends DCLogic {
       menuOpen: st.menuOpen, menuClosed: !st.menuOpen, menuOpenM: mobile && st.menuOpen, toggleMenu: () => this.setState({ menuOpen: !st.menuOpen }),
       sitTop: SIT.slice(0, 4).map(s => ({ t: s.t, pick: () => { if (mobile) return this.openFlow({ sit: s.id, sitPre: true, q1: '', q2: '', q3: '' }); this.setState({ sit: s.id, sitPre: true, q1: '', q2: '', step: st.from.trim() ? 2 : 1, sent: false }); this.scrollTo('calc'); } })),
       sitRest: SIT.slice(4).map(s => ({ t: s.id === 'flip' ? 'Перевёрнута / повреждена' : s.t, pick: () => { if (mobile) return this.openFlow({ sit: s.id, sitPre: true, q1: '', q2: '', q3: '' }); this.setState({ sit: s.id, sitPre: true, q1: '', q2: '', step: st.from.trim() ? 2 : 1, sent: false }); this.scrollTo('calc'); } })),
-      stickyLabel: 'Вызвать эвакуатор',
+      stickyLabel: 'Рассчитать',
       calcDisplay: mobile ? 'none' : 'block',
       ...this.flowVals(st, mobile, set),
       stickyAction: () => this.openFlow(), stickyOn: mobile && !st.flowOpen,
@@ -302,7 +302,7 @@ class Component extends DCLogic {
         { id: 'fleet-3', task: 'Кювет, перевёртыш, сложный доступ', tech: 'Манипулятор', ph: 'Фото: манипулятор в работе', url: 'manipulyator/' },
         { id: 'fleet-4', task: 'Грузовой транспорт, спецтехника', tech: 'Грузовой эвакуатор', ph: 'Фото: грузовой эвакуатор', url: 'gruzovoy-evakuator/' }
       ],
-      lo: ['Гатчина', 'Всеволожск', 'Пушкин', 'Колпино', 'Мурино', 'Кудрово'].map((name, i) => ({ name, url: 'lenoblast/' + ['gatchina', 'vsevolozhsk', 'pushkin', 'kolpino', 'murino', 'kudrovo'][i] + '/' })),
+      lo: ['Гатчина', 'Всеволожск', 'Пушкин', 'Колпино', 'Мурино', 'Кудрово'].map((name, i) => ({ name, url: ['lenoblast/gatchina/', 'lenoblast/vsevolozhsk/', 'evakuator-pushkin/', 'evakuator-kolpino/', 'lenoblast/murino/', 'lenoblast/kudrovo/'][i] })),
       faq: [
         { q: 'Сколько стоит эвакуатор?', a: 'Зависит от подачи, маршрута, типа автомобиля, его состояния и сложности погрузки. Диспетчер назовёт стоимость до выезда. Если условия на месте соответствуют заявленным, сумма не меняется.' },
         { q: 'Через сколько приедете?', a: 'Ориентир подачи по Петербургу 20–40 минут: в лучшем случае около 20, обычно около 30, в час пик до 40. Точное время диспетчер назовёт по адресу.' },
