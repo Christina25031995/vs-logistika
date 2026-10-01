@@ -1,0 +1,52 @@
+/* Калькулятор стоимости (assets/calc/calc.js) */
+.vsc{--b:#2350E6;--bh:#1B40BF;--ink:#16191F;--mut:#4A515C;--mut2:#6B7280;--ln:#EEF0F3;--tint:#EAF0FF;
+  background:#fff;border-radius:16px;box-shadow:0 20px 50px rgba(22,25,31,.12);padding:clamp(18px,2.4vw,30px);width:100%;max-width:520px;
+  box-sizing:border-box;display:flex;flex-direction:column;gap:16px;font-family:'Onest',system-ui,sans-serif;color:var(--ink);text-align:left}
+.vsc *{box-sizing:border-box}
+.vsc-hd{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.vsc-hd b{font-size:19px}
+.vsc-hd span{font-size:12px;font-weight:600;color:var(--bh);background:var(--tint);border-radius:999px;padding:4px 10px;white-space:nowrap}
+.vsc-f{border:0;margin:0;padding:0;min-width:0;display:flex;flex-direction:column;gap:8px}
+.vsc-f legend,.vsc-l{font-size:14px;font-weight:600;color:var(--mut);padding:0;margin-bottom:8px;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.vsc-l{margin:0}
+.vsc-l small,.vsc-hint{font-weight:500;color:var(--mut2);font-size:13px}
+.vsc-types{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.vsc-type{position:relative;cursor:pointer}
+.vsc-type input{position:absolute;opacity:0;pointer-events:none}
+.vsc-type span{display:flex;flex-direction:column;gap:2px;height:100%;border:1.5px solid #D3D8E0;border-radius:12px;padding:10px 12px;transition:border-color .15s,background .15s}
+.vsc-type b{font-size:15px;line-height:1.25}
+.vsc-type small{font-size:12.5px;color:var(--mut2);font-family:'JetBrains Mono',monospace}
+.vsc-type:hover span{border-color:#AEB6C2}
+.vsc-type input:checked+span{border-color:var(--b);background:var(--tint)}
+.vsc-type input:focus-visible+span{outline:2px solid var(--b);outline-offset:2px}
+.vsc-km{display:flex;align-items:stretch;height:52px;border:1.5px solid #D3D8E0;border-radius:12px;overflow:hidden;max-width:260px}
+.vsc-km input{flex:1;min-width:0;border:0;text-align:center;font:600 20px/1 'Onest',system-ui,sans-serif;color:var(--ink);font-variant-numeric:tabular-nums;-moz-appearance:textfield;appearance:textfield}
+.vsc-km input::-webkit-outer-spin-button,.vsc-km input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.vsc-km input:focus{outline:none;background:#FAFBFD}
+.vsc-step{width:52px;border:0;background:var(--tint);color:var(--b);font-size:24px;font-weight:600;cursor:pointer}
+.vsc-step:hover{background:#DCE5FF}
+.vsc-seg{display:flex;gap:6px}
+.vsc-seg button{flex:1;max-width:56px;height:44px;border:1.5px solid #D3D8E0;border-radius:10px;background:#fff;font:600 17px 'Onest',system-ui,sans-serif;color:var(--ink);cursor:pointer}
+.vsc-seg button[aria-checked=true]{border-color:var(--b);background:var(--b);color:#fff}
+.vsc-opts{gap:4px}
+.vsc-ck{display:flex;gap:10px;align-items:flex-start;padding:8px 0;cursor:pointer;font-size:15px;line-height:1.35}
+.vsc-ck input{width:20px;height:20px;margin:0;flex:none;accent-color:var(--b)}
+.vsc-ck small{display:block;font-size:13px;color:var(--mut2)}
+.vsc:not(.vsc--plat) .vsc-wh,.vsc:not(.vsc--plat) .vsc-plat{display:none}
+.vsc-rc{display:flex;flex-direction:column}
+.vsc-r{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:10px 0;border-top:1px solid var(--ln)}
+.vsc-r>span:first-child{display:flex;flex-direction:column;gap:1px}
+.vsc-r b{font-size:15px;font-weight:600}
+.vsc-r small{font-size:13px;color:var(--mut2)}
+.vsc-v{font-family:'JetBrains Mono',monospace;font-size:15px;white-space:nowrap}
+.vsc-tot{border-top:2px dashed #CDD3DC;padding-top:14px;display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.vsc-tot b:first-child{font-size:18px}
+.vsc-sum{font-size:clamp(26px,3vw,34px);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.vsc-note{margin:0;font-size:13.5px;line-height:1.45;color:var(--mut)}
+.vsc-ctas{display:flex;gap:10px;flex-wrap:wrap}
+.vsc-call{flex:1;min-width:220px;height:54px;border-radius:14px;background:var(--b);color:#fff;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;text-decoration:none}
+.vsc-call:hover{background:var(--bh);color:#fff}
+.vsc-reset{height:54px;padding:0 18px;border-radius:14px;border:1.5px solid #D3D8E0;background:#fff;font:600 15px 'Onest',system-ui,sans-serif;color:var(--ink);cursor:pointer}
+.vsc-call{text-align:center;padding:0 16px}
+@media (max-width:480px){.vsc-types{grid-template-columns:1fr}.vsc-call,.vsc-reset{flex:1 1 100%;min-width:0}}
+.vsc-ph{white-space:nowrap}

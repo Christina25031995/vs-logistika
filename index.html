@@ -55,6 +55,7 @@ button{align-items:center;justify-content:center}
 <script>document.addEventListener('toggle',function(e){var d=e.target;if(!d.classList||!d.classList.contains('faq-q')||!d.open)return;document.querySelectorAll('details.faq-q[open]').forEach(function(o){if(o!==d)o.open=false;});},true);</script>
 <style>.is-m .case-map{display:none!important}</style>
 <link rel="stylesheet" href="assets/legal/legal.css">
+<link rel="stylesheet" href="assets/calc/calc.css">
 <script src="assets/legal/legal.js" defer></script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "LocalBusiness", "name": "ВС-Логистика", "telephone": "+7-812-911-07-00", "email": "9110700@mail.ru", "description": "Эвакуатор и манипулятор в Санкт-Петербурге и Ленинградской области, круглосуточно. Сдвижные платформы, подкатные тележки, манипуляторы, грузовая эвакуация.", "areaServed": ["Санкт-Петербург", "Ленинградская область"], "openingHours": "Mo-Su 00:00-23:59", "priceRange": "от 3 500 ₽", "sameAs": ["https://yandex.ru/maps/org/vs_logistika/190826663125/"], "aggregateRating": {"@type": "AggregateRating", "ratingValue": "4.2", "reviewCount": "5", "ratingCount": "6", "bestRating": "5"}}</script>
 <meta property="og:title" content="Эвакуатор в Санкт-Петербурге 24/7 | ВС-Логистика"><meta property="og:description" content="Эвакуатор и манипулятор по СПб и Ленобласти. Платформа от 3 500 ₽, цена до выезда. 8 (812) 911-07-00."><meta property="og:image" content="assets/photos/fleet-wide.jpg">
@@ -438,19 +439,7 @@ button{align-items:center;justify-content:center}
         </div>
       </div>
       <div style="background:#EDF1FB;border-radius:28px;padding:clamp(20px,3.4vw,56px);display:flex;justify-content:center">
-        <div style="background:#fff;border-radius:16px;box-shadow:0 20px 50px rgba(22,25,31,0.12);padding:clamp(20px,2.4vw,32px);width:100%;max-width:460px;display:flex;flex-direction:column;gap:6px">
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><b style="font-size:19px">Расчёт вызова</b><span style="font-size:12px;font-weight:600;color:#8A5200;background:#FFF3E0;border-radius:999px;padding:4px 10px">пример расчёта по тарифам</span></div>
-          <span style="font-size:14px;color:#4A515C;padding-bottom:10px">Toyota Camry · Петроградский → Выборгский · 14 км</span>
-          
-            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:11px 0;border-top:1px solid #EEF0F3"><span style="display:flex;flex-direction:column;gap:1px"><span style="font-size:16px;font-weight:600"><span data-bind="receipt.0.t">Подача, погрузка, разгрузка</span></span><span style="font-size:13px;color:#6B7280"><span data-bind="receipt.0.d">сдвижная платформа</span></span></span><span style="font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:15px;white-space:nowrap"><span data-bind="receipt.0.v">3 500 ₽</span></span></div>
-          
-            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:11px 0;border-top:1px solid #EEF0F3"><span style="display:flex;flex-direction:column;gap:1px"><span style="font-size:16px;font-weight:600"><span data-bind="receipt.1.t">Маршрут</span></span><span style="font-size:13px;color:#6B7280"><span data-bind="receipt.1.d">14 км × 80 ₽</span></span></span><span style="font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:15px;white-space:nowrap"><span data-bind="receipt.1.v">1 120 ₽</span></span></div>
-          
-            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:11px 0;border-top:1px solid #EEF0F3"><span style="display:flex;flex-direction:column;gap:1px"><span style="font-size:16px;font-weight:600"><span data-bind="receipt.2.t">Подкатные тележки</span></span><span style="font-size:13px;color:#6B7280"><span data-bind="receipt.2.d">2 шт. × 350 ₽, заблокирована АКПП</span></span></span><span style="font-family:&#x27;JetBrains Mono&#x27;,monospace;font-size:15px;white-space:nowrap"><span data-bind="receipt.2.v">700 ₽</span></span></div>
-          
-          <div style="border-top:2px dashed #CDD3DC;margin-top:6px;padding-top:14px;display:flex;justify-content:space-between;align-items:baseline;gap:12px"><b style="font-size:18px"><dc-if data-if="mobile" hidden>Ориентир</dc-if><dc-if data-if="desktop">Итого</dc-if></b><b style="font-size:34px;letter-spacing:-0.03em;font-variant-numeric:tabular-nums">5 320 ₽</b></div>
-          <div style="margin-top:10px;display:flex;align-items:center;gap:10px;background:#E8F5EE;color:#17603A;border-radius:10px;padding:10px 12px;font-size:14px;font-weight:600"><span style="width:8px;height:8px;border-radius:50%;background:#1F9D55;flex:none"></span>Согласовано до выезда и не меняется, если условия совпадают с заявленными</div>
-        </div>
+        <div data-vs-calc style="width:100%;max-width:520px"></div>
       </div>
       <dc-if data-if="mobile" hidden><button data-action="goCalc" style="height:58px;border-radius:14px;border:0;background:#2350E6;color:#fff;font-weight:700;font-size:17px;width:100%">Рассчитать мою ситуацию</button></dc-if>
     </div>
@@ -1057,5 +1046,6 @@ button{align-items:center;justify-content:center}
 
 
 <script src="js/main.js"></script>
+<script src="assets/calc/calc.js" defer></script>
 </body>
 </html>
