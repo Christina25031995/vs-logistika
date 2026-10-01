@@ -6,9 +6,9 @@
     { id: 'car', t: 'Легковой, кроссовер', d: 'сдвижная платформа', base: 3500, km: 80, wheels: true },
     { id: 'suv', t: 'Внедорожник, микроавтобус', d: 'сдвижная платформа', base: 3500, km: 80, wheels: true },
     { id: 'man', t: 'Манипулятор', d: 'двор, участок, сложный доступ', base: 8000, km: 100 },
-    { id: 't5', t: 'Грузовой до 5 т', d: 'грузовая эвакуация', base: 12000, km: 200 },
-    { id: 't10', t: 'Грузовой 5–10 т', d: 'грузовая эвакуация', base: 15000, km: 200 },
-    { id: 't20', t: 'Грузовой от 10 т', d: 'грузовая эвакуация', base: 20000, km: 250 }
+    { id: 't5', t: 'Грузовой до 5\u00a0т', d: 'грузовая эвакуация', base: 12000, km: 200 },
+    { id: 't10', t: 'Грузовой 5\u2060–\u206010\u00a0т', d: 'грузовая эвакуация', base: 15000, km: 200 },
+    { id: 't20', t: 'Грузовой от 10\u00a0т', d: 'грузовая эвакуация', base: 20000, km: 250 }
   ];
   var WA = 'https://wa.me/79052131033';
   var WHEEL = 350, ROW = 800, PARKING = 12000, DEF_KM = 10;
@@ -57,45 +57,47 @@
     root.classList.add('vsc');
     var title = root.hasAttribute('data-title') ? root.getAttribute('data-title') : 'Калькулятор стоимости';
     root.innerHTML =
-      (title ? '<div class="vsc-hd"><h2>' + title + '</h2><span>по тарифам, сумма сразу</span></div>' : '') +
-      '<div class="vsc-body">' +
-      '<div class="vsc-col">' +
-      '<fieldset class="vsc-f"><legend>Что везём</legend><div class="vsc-types">' +
+      (title ? '<div class="vsc-hd"><h2>' + title + '</h2></div>' : '') +
+      '<div class="vsc-body"><div class="vsc-main">' +
+      '<fieldset class="vsc-blk"><legend>Что везём</legend><div class="vsc-types">' +
       TYPES.map(function (x) {
-        return '<label class="vsc-type"><input type="radio" name="vsc-t' + n + '" value="' + x.id + '"' + (x.id === st.type ? ' checked' : '') + '><span>' + x.t + '</span></label>';
-      }).join('') + '</div><small class="vsc-tar"></small></fieldset>' +
-      '<div class="vsc-f vsc-route"><span class="vsc-l">Где машина</span>' +
-        '<div class="vsc-addr"><input type="text" class="vsc-from" autocomplete="off" placeholder="Адрес или ориентир" aria-label="Где стоит машина: адрес или место">' +
-        '<button type="button" class="vsc-geo">Определить, где я</button></div>' +
-        (ROUTE ? '<div class="vsc-addr"><input type="text" class="vsc-to" autocomplete="off" placeholder="Куда везём" aria-label="Куда везём: адрес"></div>' : '') +
-        '<small class="vsc-rst" aria-live="polite"></small>' +
-        '<a class="vsc-wa" href="#" target="_blank" rel="noopener" hidden>Отправить место диспетчеру в WhatsApp</a></div>' +
+        return '<label class="vsc-type"><input type="radio" name="vsc-t' + n + '" value="' + x.id + '"' + (x.id === st.type ? ' checked' : '') + '>' +
+          '<span><b>' + x.t + '</b><small>от ' + rub(x.base) + ' + <span style="white-space:nowrap">' + x.km + NB + '₽/км</span></small></span></label>';
+      }).join('') + '</div></fieldset>' +
+      '<div class="vsc-blk"><span class="vsc-h">Маршрут</span>' +
+        '<div class="vsc-route">' +
+          '<div class="vsc-addr"><input type="text" class="vsc-from" autocomplete="off" placeholder="Откуда: адрес или ориентир" aria-label="Откуда: где стоит машина">' +
+          '<button type="button" class="vsc-geo" aria-label="Определить, где я">Я здесь</button></div>' +
+          '<div class="vsc-addr"><input type="text" class="vsc-to" autocomplete="off" placeholder="Куда везём" aria-label="Куда везём: адрес"></div>' +
+        '</div>' +
+        '<div class="vsc-kmrow"><span class="vsc-l" id="vsc-kml' + n + '">Расстояние, км</span>' +
+          '<div class="vsc-km"><button type="button" class="vsc-step" data-d="-1" aria-label="Меньше на 1 км">−</button>' +
+          '<input type="number" inputmode="numeric" min="0" max="2000" value="' + st.km + '" aria-labelledby="vsc-kml' + n + '">' +
+          '<button type="button" class="vsc-step" data-d="1" aria-label="Больше на 1 км">+</button></div>' +
+          '<small class="vsc-rst" aria-live="polite">посчитаем по адресам, можно поправить</small></div>' +
       '</div>' +
-      '<div class="vsc-col">' +
-      '<div class="vsc-f vsc-kmf"><span class="vsc-l" id="vsc-kml' + n + '">Сколько км везти</span>' +
-      '<div class="vsc-km"><button type="button" class="vsc-step" data-d="-1" aria-label="Меньше на 1 км">−</button>' +
-      '<input type="number" inputmode="numeric" min="0" max="2000" value="' + st.km + '" aria-labelledby="vsc-kml' + n + '">' +
-      '<button type="button" class="vsc-step" data-d="1" aria-label="Больше на 1 км">+</button></div></div>' +
-      '<div class="vsc-f vsc-wh"><span class="vsc-l">Заблокировано колёс</span>' +
-      '<div class="vsc-seg" role="radiogroup">' + [0, 1, 2, 3, 4].map(function (i) {
-        return '<button type="button" role="radio" data-w="' + i + '" aria-checked="' + (i === 0) + '">' + i + '</button>';
-      }).join('') + '</div></div>' +
-      '<div class="vsc-f vsc-opts vsc-plat">' +
-      '<label class="vsc-ck"><input type="checkbox" data-o="row"><span>Из ряда<small>от' + NB + rub(ROW) + '</small></span></label>' +
-      '<label class="vsc-ck"><input type="checkbox" data-o="park"><span>Из паркинга<small>подача от' + NB + rub(PARKING) + '</small></span></label>' +
+      '<div class="vsc-blk vsc-plat"><span class="vsc-h">Условия</span><div class="vsc-cond">' +
+        '<div class="vsc-wh"><span class="vsc-l">Заблокировано колёс</span><div class="vsc-seg" role="radiogroup">' + [0, 1, 2, 3, 4].map(function (i) {
+          return '<button type="button" role="radio" data-w="' + i + '" aria-checked="' + (i === 0) + '">' + i + '</button>';
+        }).join('') + '</div></div>' +
+        '<label class="vsc-ck"><input type="checkbox" data-o="row"><span><b>Из ряда</b><small>от' + NB + rub(ROW) + '</small></span></label>' +
+        '<label class="vsc-ck"><input type="checkbox" data-o="park"><span><b>Из паркинга</b><small>подача от' + NB + rub(PARKING) + '</small></span></label>' +
       '</div></div>' +
-      '<div class="vsc-col vsc-out">' +
+      '</div>' +
+      '<aside class="vsc-out">' +
+      '<span class="vsc-h">Ваш расчёт</span>' +
       '<details class="vsc-det"><summary>Из чего сумма</summary><div class="vsc-rc"></div></details>' +
       '<div class="vsc-tot"><b>Итого</b><b class="vsc-sum"></b></div>' +
-      '<p class="vsc-note">Предварительно, по тарифам. Точную сумму назовём до выезда.</p>' +
+      '<p class="vsc-note">Предварительно, по тарифам. Точную сумму назовём до выезда, и она не изменится.</p>' +
       '<div class="vsc-ctas"><a class="vsc-call" href="' + tel + '">Позвонить<span class="vsc-ph">' + NB + phone + '</span></a><button type="button" class="vsc-reset">Сбросить</button></div>' +
-      '</div></div>';
+      '</aside></div>';
 
     var kmIn = root.querySelector('.vsc-km input');
     var fromIn = root.querySelector('.vsc-from'), toIn = root.querySelector('.vsc-to'), rst = root.querySelector('.vsc-rst');
     function status(t, bad) { if (rst) { rst.textContent = t; rst.classList.toggle('vsc-bad', !!bad); } }
     function route() {
       clearTimeout(tmr);
+      if (!YMAPS_KEY) return;
       var a = fromGeo || fromIn.value.trim(), b = toIn.value.trim();
       if (!a || !b) return;
       var id = ++reqId;
@@ -113,6 +115,7 @@
     }
     var wa = root.querySelector('.vsc-wa');
     function updWA() {
+      if (!wa) return;
       var where = fromGeo ? 'https://yandex.ru/maps/?pt=' + fromGeo[1].toFixed(6) + ',' + fromGeo[0].toFixed(6) + '&z=17&l=map' : fromIn.value.trim();
       if (!where) { wa.hidden = true; return; }
       var t = type(), sum = root.querySelector('.vsc-sum').textContent.replace(/\u00a0/g, ' ');
@@ -120,7 +123,7 @@
       wa.href = WA + '?text=' + encodeURIComponent(msg); wa.hidden = false;
     }
     function later() { clearTimeout(tmr); tmr = setTimeout(route, 700); }
-    fromIn.addEventListener('input', function () { fromGeo = null; status(''); updWA(); });
+    fromIn.addEventListener('input', function () { fromGeo = null; });
     if (ROUTE) {
       var sugg = false;
       var warm = function () {
@@ -145,7 +148,6 @@
     function draw() {
       var t = type(), plat = !!t.wheels;
       root.classList.toggle('vsc--plat', plat);
-      root.querySelector('.vsc-tar').textContent = 'Тариф: от ' + rub(t.base) + ' + ' + t.km + NB + '₽/км';
       var base = plat && st.park ? PARKING : t.base;
       var rows = [['Подача, погрузка, разгрузка', plat && st.park ? 'из паркинга' : t.d, base],
                   ['Маршрут', st.km + NB + 'км × ' + t.km + NB + '₽', st.km * t.km]];
@@ -180,8 +182,6 @@
         status('Определяем, где вы…');
         navigator.geolocation.getCurrentPosition(function (p) {
           fromGeo = [p.coords.latitude, p.coords.longitude]; fromIn.value = 'Моё местоположение';
-          updWA();
-          if (!ROUTE) { status('Место определено. Отправьте его диспетчеру, чтобы он сразу знал, куда ехать'); return; }
           if (toIn.value.trim()) route(); else { status('Теперь впишите, куда везём'); toIn.focus(); }
         }, function () { status('Не получилось определить место, впишите адрес', true); }, { enableHighAccuracy: true, timeout: 10000 });
         return;
@@ -190,7 +190,7 @@
         st = { type: 'car', km: DEF_KM, wheels: 0, row: false, park: false }; kmIn.value = DEF_KM;
         root.querySelectorAll('input[type=checkbox]').forEach(function (c) { c.checked = false; });
         root.querySelector('input[value=car]').checked = true;
-        fromIn.value = ''; fromGeo = null; reqId++; status(''); if (ROUTE) toIn.value = '';
+        fromIn.value = toIn.value = ''; fromGeo = null; reqId++; status('посчитаем по адресам, можно поправить');
       } else return;
       draw();
     });

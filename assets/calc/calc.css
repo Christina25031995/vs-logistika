@@ -1,88 +1,90 @@
-/* Калькулятор стоимости (assets/calc/calc.js). Блок = один экран: на компьютере три колонки, на телефоне компактно */
-.vsc{--b:#2350E6;--bh:#1B40BF;--ink:#16191F;--mut:#4A515C;--mut2:#6B7280;--ln:#EEF0F3;--tint:#EAF0FF;
-  container-type:inline-size;background:#fff;border-radius:20px;box-shadow:0 20px 50px rgba(22,25,31,.08);padding:clamp(16px,2.4vw,32px);width:100%;max-width:1240px;margin:0 auto;
+/* Калькулятор стоимости (assets/calc/calc.js). В манере карточек «Что случилось»: крупные карточки, заметные шаги, итог в цветной панели. Блок = один экран на компьютере */
+.vsc{--b:#2350E6;--bh:#1B40BF;--ink:#16191F;--mut:#4A515C;--mut2:#6B7280;--ln:#E3E6EB;--tint:#EAF0FF;
+  container-type:inline-size;background:#fff;border:1.5px solid var(--ln);border-radius:24px;box-shadow:0 1px 2px rgba(22,25,31,.04);padding:clamp(16px,1.8vw,24px);width:100%;max-width:1240px;margin:0 auto;
   box-sizing:border-box;font-family:'Onest',system-ui,sans-serif;color:var(--ink);text-align:left}
 .vsc *{box-sizing:border-box}
-.vsc-hd{display:flex;justify-content:space-between;align-items:baseline;gap:6px 14px;flex-wrap:wrap;margin-bottom:16px}
+.vsc-hd{margin-bottom:16px}
 .vsc-hd h2{margin:0;font-size:clamp(24px,2.6vw,36px);line-height:1.1;font-weight:700;letter-spacing:-.02em}
-.vsc-hd span{font-size:13px;font-weight:600;color:var(--bh);background:var(--tint);border-radius:999px;padding:4px 10px;white-space:nowrap}
-.vsc-body{display:grid;gap:16px}
-.vsc-col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.vsc-body{display:grid;gap:20px}
+.vsc-main{display:flex;flex-direction:column;gap:16px;min-width:0}
 @container (min-width:900px){
-  .vsc-body{grid-template-columns:1.15fr 1fr 1fr;gap:32px}
-  .vsc-out{border-left:1px solid var(--ln);padding-left:32px}
+  .vsc-body{grid-template-columns:minmax(0,1.9fr) minmax(300px,1fr);gap:28px}
   .vsc-det summary{display:none}
-  .vsc-out .vsc-ctas{flex-direction:column;gap:4px}
-  .vsc-out .vsc-call{flex:none;width:100%}
-  .vsc-out .vsc-reset{height:40px;border:0;background:none;color:var(--mut);font-weight:500;text-decoration:underline;text-underline-offset:3px;align-self:center}
 }
-.vsc-f{border:0;margin:0;padding:0;min-width:0;display:flex;flex-direction:column;gap:8px}
-.vsc-f legend,.vsc-l{font-size:14px;font-weight:600;color:var(--mut);padding:0;margin:0 0 8px}
-.vsc-l{margin:0}
-.vsc-types{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.vsc-blk{border:0;margin:0;padding:0;min-width:0;display:flex;flex-direction:column;gap:8px}
+.vsc-blk legend,.vsc-h{font-size:18px;font-weight:700;letter-spacing:-.01em;color:var(--ink);padding:0;margin:0 0 8px}
+.vsc-h{margin:0}
+.vsc-l{font-size:14px;font-weight:600;color:var(--mut)}
+/* что везём: карточки как «Что случилось» */
+.vsc-types{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .vsc-type{position:relative;cursor:pointer}
 .vsc-type input{position:absolute;opacity:0;pointer-events:none}
-.vsc-type span{display:flex;align-items:center;min-height:46px;height:100%;border:1.5px solid #D3D8E0;border-radius:12px;padding:6px 12px;font-size:15px;font-weight:600;line-height:1.2;transition:border-color .15s,background .15s}
-.vsc-type:hover span{border-color:#AEB6C2}
-.vsc-type input:checked+span{border-color:var(--b);background:var(--tint);color:var(--bh)}
+.vsc-type>span{display:flex;flex-direction:column;justify-content:center;gap:4px;min-height:64px;height:100%;background:#fff;border:1.5px solid var(--ln);border-radius:16px;padding:10px 14px;transition:border-color .15s,box-shadow .15s,background .15s}
+.vsc-type b{font-size:16px;font-weight:700;line-height:1.2}
+.vsc-type small{font-size:13px;color:var(--mut)}
+.vsc-type:hover>span{border-color:var(--b);box-shadow:0 10px 28px rgba(35,80,230,.14)}
+.vsc-type input:checked+span{border-color:var(--b);background:var(--tint)}
+.vsc-type input:checked+span b{color:var(--bh)}
 .vsc-type input:focus-visible+span{outline:2px solid var(--b);outline-offset:2px}
-.vsc-tar{font-size:13px;color:var(--mut2);font-family:'JetBrains Mono',monospace}
-.vsc-km{display:flex;align-items:stretch;height:50px;border:1.5px solid #D3D8E0;border-radius:12px;overflow:hidden;max-width:240px}
-.vsc-km input{flex:1;min-width:0;border:0;text-align:center;font:600 20px/1 'Onest',system-ui,sans-serif;color:var(--ink);font-variant-numeric:tabular-nums;-moz-appearance:textfield;appearance:textfield}
+/* маршрут */
+.vsc-route{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vsc-addr{display:flex;gap:8px;min-width:0}
+.vsc-addr input{flex:1;min-width:0;height:52px;border:1.5px solid var(--ln);border-radius:14px;padding:0 14px;font:500 16px 'Onest',system-ui,sans-serif;color:var(--ink);background:#fff}
+.vsc-addr input:focus{outline:none;border-color:var(--b)}
+.vsc-geo{flex:none;height:52px;padding:0 14px;border:0;border-radius:14px;background:var(--tint);color:var(--bh);font:600 15px 'Onest',system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.vsc-geo:hover{background:#DCE5FF}
+.vsc-kmrow{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap}
+.vsc-km{display:flex;align-items:stretch;height:46px;border:1.5px solid var(--ln);border-radius:12px;overflow:hidden;width:170px}
+.vsc-km input{flex:1;min-width:0;border:0;text-align:center;font:700 19px/1 'Onest',system-ui,sans-serif;color:var(--ink);font-variant-numeric:tabular-nums;-moz-appearance:textfield;appearance:textfield}
 .vsc-km input::-webkit-outer-spin-button,.vsc-km input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .vsc-km input:focus{outline:none;background:#FAFBFD}
-.vsc-step{width:50px;border:0;background:var(--tint);color:var(--b);font-size:24px;font-weight:600;cursor:pointer}
+.vsc-step{width:46px;border:0;background:var(--tint);color:var(--b);font-size:22px;font-weight:600;cursor:pointer}
 .vsc-step:hover{background:#DCE5FF}
+.vsc-rst{font-size:13.5px;color:var(--mut2)}
+.vsc-rst.vsc-bad{color:#B42318}
+/* условия */
+.vsc-cond{display:grid;grid-template-columns:auto 1fr 1fr;gap:10px;align-items:end}
+.vsc-wh{display:flex;flex-direction:column;gap:8px}
 .vsc-seg{display:flex;gap:6px}
-.vsc-seg button{flex:1;max-width:52px;height:44px;border:1.5px solid #D3D8E0;border-radius:10px;background:#fff;font:600 17px 'Onest',system-ui,sans-serif;color:var(--ink);cursor:pointer}
+.vsc-seg button{width:46px;height:46px;border:1.5px solid var(--ln);border-radius:12px;background:#fff;font:700 17px 'Onest',system-ui,sans-serif;color:var(--ink);cursor:pointer}
+.vsc-seg button:hover{border-color:var(--b)}
 .vsc-seg button[aria-checked=true]{border-color:var(--b);background:var(--b);color:#fff}
-.vsc-opts{gap:2px}
-.vsc-ck{display:flex;gap:10px;align-items:center;min-height:40px;cursor:pointer;font-size:15px;line-height:1.3}
-.vsc-ck input{width:20px;height:20px;margin:0;flex:none;accent-color:var(--b)}
-.vsc-ck span{display:flex;flex-direction:column}
-.vsc-ck small{font-size:13px;color:var(--mut2);white-space:nowrap}
-.vsc-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.vsc:not(.vsc--plat) .vsc-wh,.vsc:not(.vsc--plat) .vsc-plat{display:none}
+.vsc-ck{position:relative;cursor:pointer}
+.vsc-ck input{position:absolute;opacity:0;pointer-events:none}
+.vsc-ck>span{display:flex;flex-direction:column;justify-content:center;gap:2px;min-height:46px;height:100%;padding:8px 14px 8px 42px;border:1.5px solid var(--ln);border-radius:12px;background:#fff;position:relative}
+.vsc-ck>span::before{content:'';position:absolute;left:14px;top:50%;width:18px;height:18px;margin-top:-9px;border:1.5px solid #AEB6C2;border-radius:6px;background:#fff}
+.vsc-ck input:checked+span{border-color:var(--b);background:var(--tint)}
+.vsc-ck input:checked+span::before{background:var(--b) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat;border-color:var(--b)}
+.vsc-ck b{font-size:15px;font-weight:700;line-height:1.2}
+.vsc-ck small{font-size:13px;color:var(--mut)}
+.vsc-ck:hover>span{border-color:var(--b)}
+.vsc:not(.vsc--plat) .vsc-plat{display:none}
+/* итог */
+.vsc-out{background:#EDF1FB;border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:12px;min-width:0}
 .vsc-det summary{cursor:pointer;font-size:14px;font-weight:600;color:var(--b);list-style:none;min-height:32px;display:flex;align-items:center}
 .vsc-det summary::-webkit-details-marker{display:none}
-.vsc-det summary::after{content:'›';margin-left:6px;transform:rotate(90deg);transition:transform .15s}
+.vsc-det summary::after{content:'›';margin-left:6px;transform:rotate(90deg)}
 .vsc-det[open] summary::after{transform:rotate(-90deg)}
 .vsc-rc{display:flex;flex-direction:column}
-.vsc-r{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;border-top:1px solid var(--ln)}
+.vsc-r{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:9px 0;border-top:1px solid #D7DFF3}
 .vsc-r>span:first-child{display:flex;flex-direction:column;gap:1px}
 .vsc-r b{font-size:15px;font-weight:600}
-.vsc-r small{font-size:13px;color:var(--mut2)}
+.vsc-r small{font-size:13px;color:var(--mut)}
 .vsc-v{font-family:'JetBrains Mono',monospace;font-size:15px;white-space:nowrap}
-.vsc-tot{border-top:2px dashed #CDD3DC;padding-top:12px;display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.vsc-tot{border-top:2px dashed #BFCBEA;padding-top:12px;display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
 .vsc-tot b:first-child{font-size:18px}
-.vsc-sum{font-size:clamp(28px,3vw,36px);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.vsc-sum{font-size:clamp(30px,3.2vw,40px);letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--ink)}
 .vsc-note{margin:0;font-size:13.5px;line-height:1.45;color:var(--mut)}
-.vsc-ctas{display:flex;gap:10px;flex-wrap:wrap}
-.vsc-call{flex:1;min-width:200px;height:54px;padding:0 16px;border-radius:14px;background:var(--b);color:#fff;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none}
+.vsc-ctas{display:flex;flex-direction:column;gap:4px;margin-top:auto}
+.vsc-call{height:56px;padding:0 16px;border-radius:14px;background:var(--b);color:#fff;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;box-shadow:0 8px 20px rgba(35,80,230,.28)}
 .vsc-call:hover{background:var(--bh);color:#fff}
 .vsc-ph{white-space:nowrap}
-.vsc-reset{height:54px;padding:0 18px;border-radius:14px;border:1.5px solid #D3D8E0;background:#fff;font:600 15px 'Onest',system-ui,sans-serif;color:var(--ink);cursor:pointer}
-.vsc-addr{display:flex;gap:8px}
-.vsc-addr input{flex:1;min-width:0;height:48px;border:1.5px solid #D3D8E0;border-radius:12px;padding:0 14px;font:500 16px 'Onest',system-ui,sans-serif;color:var(--ink);background:#fff}
-.vsc-addr input:focus{outline:none;border-color:var(--b)}
-.vsc-geo{flex:none;height:48px;padding:0 14px;border:0;border-radius:12px;background:var(--tint);color:var(--bh);font:600 15px 'Onest',system-ui,sans-serif;cursor:pointer}
-.vsc-geo:hover{background:#DCE5FF}
-.vsc-rst{font-size:13.5px;font-weight:600;color:#17603A}
-.vsc-rst.vsc-bad{color:#B42318}
-@container (max-width:520px){
-  .vsc-hd span{display:none}
-  .vsc-hd{margin-bottom:12px}
-  .vsc-body,.vsc-col{gap:14px}
-  .vsc-type span{min-height:42px}
-  .vsc-kmf{flex-direction:row;align-items:center;justify-content:space-between;gap:12px}
-  .vsc-kmf .vsc-km{width:170px;height:46px}
-  .vsc-kmf .vsc-step{width:46px}
-  .vsc-out{gap:12px}
-  .vsc-ctas{display:grid;grid-template-columns:1fr auto}
-  .vsc-call{min-width:0}
+.vsc-reset{height:38px;border:0;background:none;font:500 14px 'Onest',system-ui,sans-serif;color:var(--mut);text-decoration:underline;text-underline-offset:3px;cursor:pointer;align-self:center}
+@container (max-width:620px){
+  .vsc-types{grid-template-columns:1fr 1fr}
+  .vsc-route{grid-template-columns:1fr}
+  .vsc-cond{grid-template-columns:1fr 1fr}
+  .vsc-wh{grid-column:1/-1}
+  .vsc-seg button{flex:1;width:auto}
   .vsc-ph{display:none}
 }
-.vsc-wa{display:flex;align-items:center;justify-content:center;height:46px;border-radius:12px;background:#E8F5EE;color:#17603A;font-weight:600;font-size:15px;text-decoration:none}
-.vsc-wa:hover{background:#D5EEDF;color:#17603A}
-.vsc-wa[hidden]{display:none}
-.vsc-route .vsc-geo{white-space:nowrap}

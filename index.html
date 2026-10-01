@@ -55,7 +55,7 @@ button{align-items:center;justify-content:center}
 <script>document.addEventListener('toggle',function(e){var d=e.target;if(!d.classList||!d.classList.contains('faq-q')||!d.open)return;document.querySelectorAll('details.faq-q[open]').forEach(function(o){if(o!==d)o.open=false;});},true);</script>
 <style>.is-m .case-map{display:none!important}</style>
 <link rel="stylesheet" href="assets/legal/legal.css?v=10011828">
-<link rel="stylesheet" href="assets/calc/calc.css?v=10011839">
+<link rel="stylesheet" href="assets/calc/calc.css?v=10011921">
 <style id="fit">
 /* Главная, компьютер: каждый смысловой блок помещается в один экран (≈1440×800). Шрифты не уменьшаем — меняем раскладку и отступы. */
 @media (min-width:820px){
@@ -233,14 +233,15 @@ button{align-items:center;justify-content:center}
 </dc-if>
 
 
-<section id="price" data-screen-label="Цена" style="background:#fff;border-bottom:1px solid #E3E6EB">
-  <div style="max-width:1680px;margin:0 auto;padding:clamp(28px,3.6vw,56px) clamp(12px,3.4vw,56px);display:flex;flex-direction:column;gap:clamp(16px,2vw,24px)">
-    <div style="max-width:1240px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:10px;padding:0 4px">
-      <h2 style="margin:0;font-size:clamp(28px,3.6vw,52px);line-height:1.06;font-weight:700;letter-spacing:-0.03em;text-wrap:balance">Сначала понимаете стоимость, потом вызываете</h2>
-      <p style="margin:0;font-size:clamp(16px,1.3vw,19px);line-height:1.5;color:#3A404B">Посчитайте сумму по тарифам. Согласованная стоимость не меняется, если на месте всё как в описании.</p>
+<section id="price" data-screen-label="Цена" style="background:#F6F7F9;border-bottom:1px solid #E3E6EB">
+  <div style="max-width:1680px;margin:0 auto;padding:clamp(16px,2vw,28px) clamp(12px,3.4vw,56px);display:flex;flex-direction:column;gap:clamp(12px,1.4vw,18px)">
+    <div style="max-width:1240px;width:100%;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:6px 24px;padding:0 4px">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <h2 style="margin:0;font-size:clamp(28px,3.4vw,48px);line-height:1.06;font-weight:700;letter-spacing:-0.03em;text-wrap:balance">Сначала понимаете стоимость, потом вызываете</h2>
+        <p style="margin:0;font-size:clamp(16px,1.2vw,18px);line-height:1.5;color:#3A404B">Посчитайте сумму по&nbsp;тарифам. Согласованная стоимость не&nbsp;меняется, если на&nbsp;месте всё как в&nbsp;описании. <a href="ceny/" style="font-weight:600;white-space:nowrap">Все тарифы →</a></p>
+      </div>
     </div>
     <div data-vs-calc data-title=""></div>
-    <a href="ceny/" style="align-self:center;font-size:15px;font-weight:600">Все тарифы →</a>
   </div>
 </section>
 
@@ -1033,6 +1034,6 @@ button{align-items:center;justify-content:center}
 
 
 <script src="js/main.js?v=10011839"></script>
-<script src="assets/calc/calc.js?v=10011839" defer></script>
+<script src="assets/calc/calc.js?v=10011921" defer></script>
 </body>
 </html>
