@@ -135,7 +135,7 @@ button{align-items:center;justify-content:center}
         <input id="hero-from" value="" data-on-input="onFrom" placeholder="Улица и дом или ориентир: «КАД, съезд на Выборгское»" style="height:66px;border:1.5px solid #CDD3DC;border-radius:14px;padding:0 18px;font-size:18px;color:#16191F;outline:none;background:#fff;width:100%" data-bind-attr='{"value": "from"}'>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px">
           <button data-action="onLocate" style="height:64px;border-radius:14px;border:1.5px solid #C9D6FB;background:#EAF0FF;color:#1B40BF;font-weight:600;font-size:17px;display:flex;align-items:center;justify-content:center;gap:9px;white-space:nowrap;padding:0 12px"><svg width="20" height="20" viewbox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="8" r="4.5"><path d="M8 1v2.5M8 12.5V15M1 8h2.5M12.5 8H15"></svg><span data-bind="locateLabel">Определить, где я</span></button>
-          <button data-action="heroCall" style="height:64px;border-radius:14px;border:0;background:#2350E6;color:#fff;font-weight:700;font-size:18px;white-space:nowrap;box-shadow:0 8px 20px rgba(35,80,230,0.28)" style-hover="background:#1B40BF">Вызвать эвакуатор</button>
+          <a href="tel:+78129110700" style="height:64px;border-radius:14px;background:#2350E6;color:#fff;font-weight:700;font-size:18px;white-space:nowrap;box-shadow:0 8px 20px rgba(35,80,230,0.28);display:flex;align-items:center;justify-content:center" style-hover="background:#1B40BF">Вызвать эвакуатор</a>
         </div>
         <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:6px 16px;border-top:1px solid #EEF0F3;padding-top:14px">
           <span style="font-size:15px;color:#4A515C">Или позвоните сейчас:</span>
@@ -539,7 +539,7 @@ button{align-items:center;justify-content:center}
     </div>
     <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px 24px;padding-top:4px">
       <dc-if data-if="desktop"><span style="font-size:clamp(18px,1.5vw,22px);font-weight:600">Нужна помощь в похожей ситуации?</span></dc-if><dc-if data-if="mobile" hidden><button data-action="heroCall" style="width:100%;height:58px;border-radius:14px;border:0;background:#2350E6;color:#fff;font-weight:700;font-size:17px">Нужна похожая помощь</button></dc-if>
-      <button data-action="heroCall" style="display:flex;height:58px;padding:0 26px;border-radius:14px;border:0;background:#2350E6;color:#fff;font-weight:700;font-size:17px" style-hover="background:#1B40BF" data-bind-style='{"display": "{{subFlex}}"}'>Вызвать эвакуатор</button>
+      <a href="tel:+78129110700" style="display:flex;height:58px;padding:0 26px;border-radius:14px;background:#2350E6;color:#fff;font-weight:700;font-size:17px;align-items:center;justify-content:center" style-hover="background:#1B40BF" data-bind-style='{"display": "{{subFlex}}"}'>Вызвать эвакуатор</a>
     </div>
     <!-- демо: маршруты и стоимость в кейсах заменить реальными данными клиента -->
   </div>
