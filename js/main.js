@@ -152,7 +152,13 @@ class Component extends DCLogic {
     const eta = (sit === 'ditch' || sit === 'flip') ? '≈30–40 мин' : this.eta();
     const f = this.state.from.toLowerCase();
     const dm = DISTRICTS.find(([n]) => f.includes(n.slice(0, 5).toLowerCase()));
-    return { tech, why, eta, district: dm ? dm[0] : 'уточнит диспетчер', summary: s.t + (v ? ' · ' + v.t : '') };
+    // цена по тарифам клиента (тарифы-клиента-2026-09-30.doc); итог по маршруту называет диспетчер
+    const PR = { 'Сдвижная платформа': 'от 3\u00a0500\u00a0₽ + от 80\u00a0₽/\u2060км', 'Платформа + подкатные тележки': 'от 3\u00a0500\u00a0₽ + тележки от 350\u00a0₽/\u2060шт + км',
+      'Манипулятор': 'от 8\u00a0000\u00a0₽ + 100\u00a0₽/\u2060км', 'Платформа с пологим заездом': 'от 3\u00a0500\u00a0₽ + от 80\u00a0₽/\u2060км',
+      'Платформа с креплением для мото': 'от 3\u00a0500\u00a0₽ + от 80\u00a0₽/\u2060км', 'Грузовой эвакуатор': 'от 12\u00a0000\u00a0₽ + 200\u00a0₽/\u2060км' };
+    const price = PR[tech.replace(/\u00a0/g, ' ')] || 'назовём по\u00a0телефону';
+    const priceNote = (sit === 'ditch' || sit === 'flip') ? 'Кювет и перевёртыш рассчитываем по\u00a0сложности, итог назовём до\u00a0выезда' : 'Итог по\u00a0маршруту назовём до\u00a0выезда, он не\u00a0изменится';
+    return { tech, why, eta, price, priceNote, district: dm ? dm[0] : 'уточнит диспетчер', summary: s.t + (v ? ' · ' + v.t : '') };
   }
   flowVals(st, mobile, set) {
     const fs = st.fstep, res = st.fResume;
