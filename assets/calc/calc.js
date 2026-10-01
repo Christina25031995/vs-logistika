@@ -10,6 +10,7 @@
     { id: 't10', t: 'Грузовой 5–10 т', d: 'грузовая эвакуация', base: 15000, km: 200 },
     { id: 't20', t: 'Грузовой от 10 т', d: 'грузовая эвакуация', base: 20000, km: 250 }
   ];
+  var WA = 'https://wa.me/79052131033';
   var WHEEL = 350, ROW = 800, PARKING = 12000, DEF_KM = 10;
 
   /* Километры по адресам через Яндекс Карты. Пока ключей нет, человек вписывает км сам.
@@ -63,11 +64,12 @@
       TYPES.map(function (x) {
         return '<label class="vsc-type"><input type="radio" name="vsc-t' + n + '" value="' + x.id + '"' + (x.id === st.type ? ' checked' : '') + '><span>' + x.t + '</span></label>';
       }).join('') + '</div><small class="vsc-tar"></small></fieldset>' +
-      (ROUTE ? '<div class="vsc-f vsc-route"><span class="vsc-l">Маршрут</span>' +
-        '<div class="vsc-addr"><input type="text" class="vsc-from" autocomplete="off" placeholder="Где стоит машина" aria-label="Где стоит машина: адрес или место">' +
-        '<button type="button" class="vsc-geo">Я здесь</button></div>' +
-        '<div class="vsc-addr"><input type="text" class="vsc-to" autocomplete="off" placeholder="Куда везём" aria-label="Куда везём: адрес"></div>' +
-        '<small class="vsc-rst" aria-live="polite"></small></div>' : '') +
+      '<div class="vsc-f vsc-route"><span class="vsc-l">Где машина</span>' +
+        '<div class="vsc-addr"><input type="text" class="vsc-from" autocomplete="off" placeholder="Адрес или ориентир" aria-label="Где стоит машина: адрес или место">' +
+        '<button type="button" class="vsc-geo">Определить, где я</button></div>' +
+        (ROUTE ? '<div class="vsc-addr"><input type="text" class="vsc-to" autocomplete="off" placeholder="Куда везём" aria-label="Куда везём: адрес"></div>' : '') +
+        '<small class="vsc-rst" aria-live="polite"></small>' +
+        '<a class="vsc-wa" href="#" target="_blank" rel="noopener" hidden>Отправить место диспетчеру в WhatsApp</a></div>' +
       '</div>' +
       '<div class="vsc-col">' +
       '<div class="vsc-f vsc-kmf"><span class="vsc-l" id="vsc-kml' + n + '">Сколько км везти</span>' +
@@ -109,7 +111,16 @@
         status('Не нашли адрес. Уточните его или впишите километры ниже', true);
       });
     }
+    var wa = root.querySelector('.vsc-wa');
+    function updWA() {
+      var where = fromGeo ? 'https://yandex.ru/maps/?pt=' + fromGeo[1].toFixed(6) + ',' + fromGeo[0].toFixed(6) + '&z=17&l=map' : fromIn.value.trim();
+      if (!where) { wa.hidden = true; return; }
+      var t = type(), sum = root.querySelector('.vsc-sum').textContent.replace(/\u00a0/g, ' ');
+      var msg = 'Здравствуйте! Нужен эвакуатор. Машина здесь: ' + where + '\nРасчёт на сайте: ' + t.t + ', ' + st.km + ' км, ' + sum;
+      wa.href = WA + '?text=' + encodeURIComponent(msg); wa.hidden = false;
+    }
     function later() { clearTimeout(tmr); tmr = setTimeout(route, 700); }
+    fromIn.addEventListener('input', function () { fromGeo = null; status(''); updWA(); });
     if (ROUTE) {
       var sugg = false;
       var warm = function () {
@@ -146,6 +157,7 @@
         return '<div class="vsc-r"><span><b>' + r[0] + '</b>' + (r[1] ? '<small>' + r[1] + '</small>' : '') + '</span><span class="vsc-v">' + rub(r[2]) + '</span></div>';
       }).join('');
       root.querySelector('.vsc-sum').textContent = 'от' + NB + rub(sum);
+      if (wa) updWA();
       root.querySelectorAll('.vsc-seg button').forEach(function (b) { b.setAttribute('aria-checked', String(+b.getAttribute('data-w') === st.wheels)); });
     }
 
@@ -168,6 +180,8 @@
         status('Определяем, где вы…');
         navigator.geolocation.getCurrentPosition(function (p) {
           fromGeo = [p.coords.latitude, p.coords.longitude]; fromIn.value = 'Моё местоположение';
+          updWA();
+          if (!ROUTE) { status('Место определено. Отправьте его диспетчеру, чтобы он сразу знал, куда ехать'); return; }
           if (toIn.value.trim()) route(); else { status('Теперь впишите, куда везём'); toIn.focus(); }
         }, function () { status('Не получилось определить место, впишите адрес', true); }, { enableHighAccuracy: true, timeout: 10000 });
         return;
@@ -176,7 +190,7 @@
         st = { type: 'car', km: DEF_KM, wheels: 0, row: false, park: false }; kmIn.value = DEF_KM;
         root.querySelectorAll('input[type=checkbox]').forEach(function (c) { c.checked = false; });
         root.querySelector('input[value=car]').checked = true;
-        if (ROUTE) { fromIn.value = toIn.value = ''; fromGeo = null; reqId++; status(''); }
+        fromIn.value = ''; fromGeo = null; reqId++; status(''); if (ROUTE) toIn.value = '';
       } else return;
       draw();
     });

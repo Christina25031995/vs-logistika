@@ -82,3 +82,7 @@
   .vsc-call{min-width:0}
   .vsc-ph{display:none}
 }
+.vsc-wa{display:flex;align-items:center;justify-content:center;height:46px;border-radius:12px;background:#E8F5EE;color:#17603A;font-weight:600;font-size:15px;text-decoration:none}
+.vsc-wa:hover{background:#D5EEDF;color:#17603A}
+.vsc-wa[hidden]{display:none}
+.vsc-route .vsc-geo{white-space:nowrap}
