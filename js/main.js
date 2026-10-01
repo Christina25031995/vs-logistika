@@ -158,18 +158,7 @@ class Component extends DCLogic {
       'Платформа с креплением для мото': 'от 3\u00a0500\u00a0₽ + от 80\u00a0₽/\u2060км', 'Грузовой эвакуатор': 'от 12\u00a0000\u00a0₽ + 200\u00a0₽/\u2060км' };
     const price = PR[tech.replace(/\u00a0/g, ' ')] || 'назовём по\u00a0телефону';
     const priceNote = (sit === 'ditch' || sit === 'flip') ? 'Кювет и перевёртыш рассчитываем по\u00a0сложности, итог назовём до\u00a0выезда' : 'Итог по\u00a0маршруту назовём до\u00a0выезда, он не\u00a0изменится';
-    // точная сумма по тарифу: человек сам вписывает км и число тележек (как у конкурентов, без платных карт)
-    const T = tech.replace(/\u00a0/g, ' ');
-    const RATE = { 'Сдвижная платформа': [3500, 80], 'Платформа + подкатные тележки': [3500, 80], 'Платформа с пологим заездом': [3500, 80], 'Платформа с креплением для мото': [3500, 80], 'Манипулятор': [8000, 100], 'Грузовой эвакуатор': [12000, 200] }[T];
-    const km = Math.max(0, Math.min(500, parseInt(this.state.km, 10) || 0));
-    const needTrol = T === 'Платформа + подкатные тележки';
-    const trol = needTrol ? (this.state.trol == null ? 2 : this.state.trol) : 0;
-    const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0') + '\u00a0₽';
-    const sum = RATE ? RATE[0] + km * RATE[1] + trol * 350 : 0;
-    const rough = sit === 'ditch' || sit === 'flip';
-    const total = !RATE ? 'назовём по\u00a0телефону' : (rough ? 'от ' : '≈\u00a0') + fmt(sum);
-    const parts = !RATE ? '' : fmt(RATE[0]) + ' подача и\u00a0погрузка' + (km ? ' + ' + km + '\u00a0км × ' + RATE[1] + '\u00a0₽' : '') + (trol ? ' + ' + trol + '\u00a0тел. × 350\u00a0₽' : '');
-    return { tech, why, eta, price, priceNote, total, parts, km: km || '', needTrol, trol, hasRate: !!RATE, district: dm ? dm[0] : 'уточнит диспетчер', summary: s.t + (v ? ' · ' + v.t : '') };
+    return { tech, why, eta, price, priceNote, district: dm ? dm[0] : 'уточнит диспетчер', summary: s.t + (v ? ' · ' + v.t : '') };
   }
   flowVals(st, mobile, set) {
     const fs = st.fstep, res = st.fResume;
@@ -282,7 +271,6 @@ class Component extends DCLogic {
       showQ1: needQ1, showQ2: needQ2, q1: opt3('q1'), q2: opt3('q2'),
       noVeh: !st.veh, vehBg: st.veh ? '#2350E6' : '#A9B9F2',
       result: this.result(),
-      onKm: e => this.setState({ km: e.target.value.replace(/\D/g, '').slice(0, 3) }), trolMinus: () => this.setState({ trol: Math.max(0, (this.state.trol == null ? 2 : this.state.trol) - 1) }), trolPlus: () => this.setState({ trol: Math.min(4, (this.state.trol == null ? 2 : this.state.trol) + 1) }),
       fromShow: st.from || 'уточнит диспетчер', toShow: st.to || 'решим с диспетчером',
       sent: st.sent, notSent: !st.sent,
       send: () => { const n = st.phone.replace(/\D/g, '').length; if (!(n >= 10 && n <= 11)) return this.setState({ phoneErr: true }); if (!st.agree) return this.setState({ agreeErr: true, phoneErr: false }); this.setState({ sent: true, phoneErr: false, agreeErr: false, fstep: st.flowOpen ? 6 : st.fstep }); if (window.vslGoal) window.vslGoal('lead'); },
