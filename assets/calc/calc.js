@@ -54,9 +54,9 @@
     var tel = root.getAttribute('data-tel') || 'tel:+78129110700';
     var phone = root.getAttribute('data-phone') || '8 (812) 911-07-00';
     root.classList.add('vsc');
-    var title = root.getAttribute('data-title') || 'Калькулятор стоимости';
+    var title = root.hasAttribute('data-title') ? root.getAttribute('data-title') : 'Калькулятор стоимости';
     root.innerHTML =
-      '<div class="vsc-hd"><h2>' + title + '</h2><span>по тарифам, сумма сразу</span></div>' +
+      (title ? '<div class="vsc-hd"><h2>' + title + '</h2><span>по тарифам, сумма сразу</span></div>' : '') +
       '<div class="vsc-body">' +
       '<div class="vsc-col">' +
       '<fieldset class="vsc-f"><legend>Что везём</legend><div class="vsc-types">' +

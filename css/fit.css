@@ -1,10 +1,5 @@
 /* Главная, компьютер: каждый смысловой блок помещается в один экран (≈1440×800). Шрифты не уменьшаем — меняем раскладку и отступы. */
 @media (min-width:820px){
-  :root:not(.is-m) #price>div{padding-top:clamp(36px,3.4vw,52px)!important;padding-bottom:clamp(36px,3.4vw,52px)!important}
-  :root:not(.is-m) #price>div>div:first-child{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)!important}
-  :root:not(.is-m) #price ol{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  :root:not(.is-m) #price ol>li{padding:10px 0!important}
-  :root:not(.is-m) .price-right>div>div:last-child{grid-template-columns:1fr 1fr!important}
 
   /* Сложная эвакуация: фото по высоте текста, ситуации в две колонки */
   :root:not(.is-m) section[data-screen-label="Сложная эвакуация"]>div{padding-top:clamp(36px,3.4vw,52px)!important;padding-bottom:clamp(36px,3.4vw,52px)!important}
