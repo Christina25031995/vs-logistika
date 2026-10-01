@@ -35,3 +35,11 @@
 @media (min-width:820px){
   :root:not(.is-m) #calc>div{padding-top:clamp(20px,2vw,32px)!important;padding-bottom:clamp(20px,2vw,32px)!important}
 }
+/* компьютер: блоки «Что случилось» и «Рассчитать вызов» объединены — ситуации слева в анкете, отдельный блок скрыт (на телефоне остаётся) */
+@media (min-width:820px){
+  :root:not(.is-m) #sit{display:none!important}
+  :root:not(.is-m) #calc>div{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
+  :root:not(.is-m) #calc>div>div:first-of-type{max-width:none!important;gap:18px!important}
+  .sitc:hover{border-color:#2350E6!important}
+  .sitc{align-items:flex-start!important;text-align:left!important}
+}

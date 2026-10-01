@@ -252,7 +252,7 @@ class Component extends DCLogic {
 
       goCalc: () => { if (mobile) return this.openFlow(); this.scrollTo('calc'); }, goCall: go('call'),
       districts: DISTRICTS.map(([name, slug, eta]) => ({ name, url: (BUILT_D.includes(slug) ? 'evakuator-' + slug + '-rayon/' : 'rayony/'), eta: eta + ' мин' })),
-      situations: SIT.map(s => ({ ...s, pick: () => { if (mobile) return this.openFlow({ sit: s.id, sitPre: true, q1: '', q2: '', q3: '' }); this.setState({ sit: s.id, sitPre: true, q1: '', q2: '', step: st.from.trim() ? 2 : 1, sent: false }); this.scrollTo('calc'); } })),
+      situations: SIT.map(s => ({ ...s, bd: st.sit === s.id ? '#2350E6' : '#E3E6EB', bg: st.sit === s.id ? '#EAF0FF' : '#fff', pick: () => { if (mobile) return this.openFlow({ sit: s.id, sitPre: true, q1: '', q2: '', q3: '' }); this.setState({ sit: s.id, sitPre: true, q1: '', q2: '', step: st.from.trim() ? 2 : 1, sent: false }); this.scrollTo('calc'); } })),
       s1: st.step === 1, s2: st.step === 2, s3: st.step === 3, s4: st.step === 4, s5: st.step === 5,
       canBack: st.step > 1, back: () => this.setState({ step: st.step === 4 && st.sit && st.sitPre ? 2 : Math.max(1, st.step - 1), sent: false }),
       stepLabel: st.step < 5 ? 'Шаг ' + st.step + ' из 4' : 'Результат',
