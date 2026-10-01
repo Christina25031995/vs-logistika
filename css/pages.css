@@ -167,3 +167,4 @@ h1{font-size:clamp(32px,4.2vw,54px);line-height:1.06;font-weight:700}
 }
 .calc-wrap{margin:8px 0 24px}
 .stars{color:#F5B301;letter-spacing:1px}
+@media (min-width:1220px) and (max-width:1400px){.hd-r .live{display:none}.hd-nav{gap:18px}.hd-in{gap:20px}}
