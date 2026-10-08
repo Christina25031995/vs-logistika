@@ -29,5 +29,6 @@
 - [Районы Петербурга](rayony/)
 - [Ленинградская область](lenoblast/)
 - [КАД](evakuator-kad/), [ЗСД](evakuator-zsd/)
+- [Сколько стоит эвакуатор: тарифы и примеры расчёта](sovety/skolko-stoit-evakuator/)
 - [Советы водителям](sovety/)
 - [Контакты](contacts/), [О компании](about/)
