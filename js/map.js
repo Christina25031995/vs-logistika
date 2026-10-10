@@ -21,7 +21,10 @@ const KEY = compact ? ['Петроградский','Московский'] : ['
 const map = L.map('map', {zoomControl:!compact, scrollWheelZoom:false, dragging:!compact, tap:true, attributionControl:true})
   .setView(compact ? [59.94,30.31] : [59.943,30.31], compact ? 10 : 11);
 if (!compact) map.zoomControl.setPosition('bottomright');
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:18, attribution:'© OpenStreetMap contributors'}).addTo(map);
+const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:18, attribution:'© OpenStreetMap contributors'}).addTo(map);
+// заглушка на главной: сообщаем, когда плитки видимой области загрузились (или через 6 с)
+let readySent = false; const ready = () => { if (readySent) return; readySent = true; try { parent.postMessage({type:'vsl-map', action:'ready'}, '*'); } catch (e) {} };
+tiles.once('load', ready); setTimeout(ready, 6000);
 
 const TOW = '<svg width="30" height="16" viewBox="0 0 30 16" fill="currentColor"><rect x="1" y="9" width="19" height="2.6" rx=".6"/><path d="M1.5 9l1.5-1.6h14.5L19 9z" opacity=".55"/><path d="M20 11.6V5.5c0-.6.4-1 1-1h3.6c.4 0 .7.2.9.5l2.8 3.6c.2.2.2.5.2.7v2.3z"/><path d="M22 6h2.7l2 2.6H22z" fill="#fff" opacity=".9"/><circle cx="5" cy="13" r="2.2"/><circle cx="11" cy="13" r="2.2"/><circle cx="24.5" cy="13" r="2.2"/></svg>';
 const MANIP = '<svg width="30" height="16" viewBox="0 0 30 16" fill="currentColor"><rect x="1" y="9" width="19" height="2.6" rx=".6"/><path d="M20 11.6V5.5c0-.6.4-1 1-1h3.6c.4 0 .7.2.9.5l2.8 3.6c.2.2.2.5.2.7v2.3z"/><path d="M22 6h2.7l2 2.6H22z" fill="#fff" opacity=".9"/><rect x="16" y="5.4" width="3" height="3.6" rx=".5"/><path d="M17.5 6.2L5 1.6" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M5 1.6v3.6" stroke="currentColor" stroke-width="1.2"/><circle cx="5" cy="13" r="2.2"/><circle cx="11" cy="13" r="2.2"/><circle cx="24.5" cy="13" r="2.2"/></svg>';

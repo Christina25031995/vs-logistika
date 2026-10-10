@@ -194,7 +194,7 @@ button{align-items:center;justify-content:center}
       
     </div>
     <div style="position:relative;min-height:720px;border-left:1px solid #E3E6EB" data-bind-style='{"min-height": "{{heroMapH}}"}'>
-      <iframe data-map="1" src="spb-map.html?hero" title="Эвакуаторы на линии по районам Санкт-Петербурга" style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#F2EFE9"></iframe>
+      <div class="map-poster" aria-hidden="true" style="position:absolute;inset:0;background:#F2EFE9 url(assets/map-hero.jpg) center/cover no-repeat"></div><iframe data-map="1" src="spb-map.html?hero" title="Эвакуаторы на линии по районам Санкт-Петербурга" style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:transparent;opacity:0;transition:opacity .5s"></iframe>
     </div>
   </div>
 </section>
@@ -223,7 +223,7 @@ button{align-items:center;justify-content:center}
 <section id="live-map" data-screen-label="Карта mobile" style="background:#fff;border-bottom:1px solid #E3E6EB;padding:6px 16px 22px;display:flex;flex-direction:column;gap:10px">
   <span style="display:flex;align-items:center;gap:9px;font-size:15px;font-weight:700"><span style="width:8px;height:8px;border-radius:50%;background:#1F9D55;box-shadow:0 0 0 3px rgba(31,157,85,0.2);flex:none"></span>Эвакуаторы на линии в реальном времени</span>
   <div style="position:relative;height:clamp(240px,72vw,320px);border-radius:18px;overflow:hidden;border:1px solid #DDE1E7">
-    <iframe data-map="1" src="spb-map.html?compact" title="Эвакуаторы на линии по районам Санкт-Петербурга" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:#F2EFE9"></iframe>
+    <div class="map-poster" aria-hidden="true" style="position:absolute;inset:0;background:#F2EFE9 url(assets/map-compact.jpg) center/cover no-repeat"></div><iframe data-map="1" src="spb-map.html?compact" title="Эвакуаторы на линии по районам Санкт-Петербурга" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:transparent;opacity:0;transition:opacity .5s"></iframe>
   </div>
   <span style="font-size:13px;color:#4A515C">2⁠–⁠3 экипажа работают в каждом районе · нажмите на район</span>
   <div style="display:flex;flex-direction:column;gap:4px;border-top:1px solid #EEF0F3;padding-top:14px;margin-top:4px">
@@ -1044,5 +1044,9 @@ button{align-items:center;justify-content:center}
 
 <script src="js/main.js?v=10011839"></script>
 <script src="assets/calc/calc.js?v=10011921" defer></script>
+<script>/* заглушка карты: живая карта проявляется, когда загрузилась (сообщение от spb-map.html или через 8 с) */
+(function(){function show(f){f.style.opacity='1'}
+window.addEventListener('message',function(e){var m=e.data||{};if(m.type!=='vsl-map'||m.action!=='ready')return;document.querySelectorAll('iframe[data-map]').forEach(function(f){if(f.contentWindow===e.source)show(f)})});
+setTimeout(function(){document.querySelectorAll('iframe[data-map]').forEach(show)},8000);})();</script>
 </body>
 </html>
