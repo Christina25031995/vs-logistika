@@ -269,9 +269,18 @@ class Component extends DCLogic {
       result: this.result(), isResult: st.step === 5, notResult: st.step !== 5, edit: set({ step: 1, sent: false }),
       fromShow: st.from || 'уточнит диспетчер', toShow: st.to || 'решим с диспетчером',
       sent: st.sent, notSent: !st.sent,
-      send: () => { const n = st.phone.replace(/\D/g, '').length; if (!(n >= 10 && n <= 11)) return this.setState({ phoneErr: true }); if (!st.agree) return this.setState({ agreeErr: true, phoneErr: false }); this.setState({ sent: true, phoneErr: false, agreeErr: false, fstep: st.flowOpen ? 6 : st.fstep }); if (window.vslGoal) window.vslGoal('lead'); },
+      send: () => { if (st.sending) return; const n = st.phone.replace(/\D/g, '').length; if (!(n >= 10 && n <= 11)) return this.setState({ phoneErr: true }); if (!st.agree) return this.setState({ agreeErr: true, phoneErr: false });
+        /* заявка уходит Владиславу в Max через api/lead.php на хостинге; при ошибке просим позвонить */
+        this.setState({ sending: true, sendErr: false, phoneErr: false, agreeErr: false });
+        const r = this.result(), lab = (a, id) => (a.find(x => x.id === id) || {}).t || '', picked = !!(st.sit || st.veh);
+        const d = { phone: st.phone, from: st.from, to: st.to, sit: lab(SIT, st.sit), veh: lab(VEH, st.veh), q1: st.q1, q2: st.q2, q3: st.q3, comment: st.comment,
+          tech: picked ? r.tech : '', price: picked ? r.price.replace(/\u2060/g, '') : '', page: location.pathname };
+        fetch('api/lead.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
+          .then(x => x.json()).then(j => { if (!j.ok) throw 0; this.setState({ sending: false, sent: true, fstep: this.state.flowOpen ? 6 : this.state.fstep }); if (window.vslGoal) window.vslGoal('lead'); })
+          .catch(() => this.setState({ sending: false, sendErr: true })); },
+      sendErr: !!st.sendErr,
       agree: !!st.agree, agreeErr: !!st.agreeErr, onAgree: e => this.setState({ agree: e.target.checked, agreeErr: false }),
-      restart: set({ step: 1, sit: '', sitPre: false, veh: '', q1: '', q2: '', to: '', toKind: '', sent: false, comment: '', showComment: false }),
+      restart: set({ sendErr: false, step: 1, sit: '', sitPre: false, veh: '', q1: '', q2: '', to: '', toKind: '', sent: false, comment: '', showComment: false }),
       factors: [
         { n: '01', t: 'Подача', d: 'Выезд экипажа к автомобилю. За КАД по километражу.' },
         { n: '02', t: 'Маршрут', d: 'Расстояние от места погрузки до точки выгрузки.' },
