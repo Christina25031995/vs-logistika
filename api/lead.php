@@ -61,6 +61,7 @@ foreach ([['from', 'Где машина'], ['to', 'Куда везти'], ['sit'
           ['comment', 'Комментарий'], ['page', 'Страница']] as [$k, $label]) {
   $v = $f($k); if ($v !== '') $lines[] = $label . ': ' . $v;
 }
+if (preg_match('/(-?\d{1,2}\.\d+),\s*(-?\d{1,3}\.\d+)/', $f('from'), $m)) $lines[] = 'Точка на карте: https://yandex.ru/maps/?pt=' . $m[2] . ',' . $m[1] . '&z=17&l=map';
 $lines[] = date('d.m.Y H:i') . ' МСК';
 $text = implode("\n", $lines);
 

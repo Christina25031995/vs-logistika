@@ -237,7 +237,7 @@ class Component extends DCLogic {
       onTo: e => this.setState({ to: e.target.value, toKind: '' }),
       onPhone: e => this.setState({ phone: e.target.value }),
       onLocate: this.locate,
-      locateLabel: st.locating ? 'Определяем…' : st.locErr ? 'Не получилось, введите адрес' : 'Определить, где я',
+      locateLabel: st.locating ? 'Определяем…' : st.locErr ? 'Не получилось, введите адрес' : 'Отправить диспетчеру мою геолокацию',
       heroCall: () => { if (mobile) return this.openFlow(); this.setState({ step: st.from.trim() ? 2 : 1, sent: false }); this.scrollTo('calc'); },
       comment: st.comment, onComment: e => this.setState({ comment: e.target.value }),
       showComment: st.showComment, noComment: !st.showComment, toggleComment: set({ showComment: true }),
