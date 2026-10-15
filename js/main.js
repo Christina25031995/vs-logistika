@@ -127,7 +127,7 @@ class Component extends DCLogic {
     if (!navigator.geolocation) return this.setState({ locErr: true });
     this.setState({ locating: true, locErr: false });
     navigator.geolocation.getCurrentPosition(
-      p => { this.setState({ locating: false, from: 'Моё местоположение · ' + p.coords.latitude.toFixed(4) + ', ' + p.coords.longitude.toFixed(4) }); document.querySelectorAll('iframe[data-map]').forEach(f => { try { f.contentWindow.postMessage({ type: 'vsl-locate', lat: p.coords.latitude, lon: p.coords.longitude }, '*'); } catch (e) {} }); },
+      p => { this.setState({ locating: false, located: true, from: 'Моё местоположение · ' + p.coords.latitude.toFixed(4) + ', ' + p.coords.longitude.toFixed(4) }); document.querySelectorAll('iframe[data-map]').forEach(f => { try { f.contentWindow.postMessage({ type: 'vsl-locate', lat: p.coords.latitude, lon: p.coords.longitude }, '*'); } catch (e) {} }); },
       () => this.setState({ locating: false, locErr: true }),
       { timeout: 8000, maximumAge: 60000 }
     );
@@ -278,7 +278,7 @@ class Component extends DCLogic {
         fetch('api/lead.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
           .then(x => x.json()).then(j => { if (!j.ok) throw 0; this.setState({ sending: false, sent: true, fstep: this.state.flowOpen ? 6 : this.state.fstep }); if (window.vslGoal) window.vslGoal('lead'); })
           .catch(() => this.setState({ sending: false, sendErr: true })); },
-      sendErr: !!st.sendErr,
+      sendErr: !!st.sendErr, quickOpen: !!st.located && !st.sent, quickSent: !!st.located && !!st.sent,
       agree: !!st.agree, agreeErr: !!st.agreeErr, onAgree: e => this.setState({ agree: e.target.checked, agreeErr: false }),
       restart: set({ sendErr: false, step: 1, sit: '', sitPre: false, veh: '', q1: '', q2: '', to: '', toKind: '', sent: false, comment: '', showComment: false }),
       factors: [
