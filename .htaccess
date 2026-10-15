@@ -1,0 +1,8 @@
+# Склейка зеркал и дубля главной (15.10.2026, SEO: главное зеркало для Яндекса = https://vs-evakuator.ru/)
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^www\.vs-evakuator\.ru$ [NC]
+RewriteRule ^(.*)$ https://vs-evakuator.ru/$1 [R=301,L]
+RewriteCond %{THE_REQUEST} \s/+index\.html[\s?]
+RewriteRule ^index\.html$ https://vs-evakuator.ru/ [R=301,L]
+</IfModule>
