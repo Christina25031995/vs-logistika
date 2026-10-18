@@ -2,7 +2,7 @@
    METRIKA_ID пуст, пока счётчик не создан: тогда уведомление не показывается (аналитики нет). */
 (function(){
   "use strict";
-  var METRIKA_ID = '';
+  var METRIKA_ID = '113667299';  /* счётчик «ВС-Логистика сайт vs-evakuator.ru», аккаунт evakuatorok-spb, 18.10.2026 */
   var KEY = 'vsl-cookie-consent-v1'; /* 'all' | 'necessary' */
   var me = document.currentScript;
   var base = me ? me.src.replace(/assets\/legal\/legal\.js.*$/, '') : '/';
@@ -26,6 +26,7 @@
     if (/^tel:/.test(h)) goal('call');
     else if (/wa\.me\//.test(h)) goal('whatsapp');
     else if (/t\.me\//.test(h)) goal('telegram');
+    else if (/max\.ru\//.test(h)) goal('max');
   }, true);
   var bar = null;
   function hide(){ if (!bar) return; bar.classList.remove('is-in'); var b = bar; bar = null; setTimeout(function(){ b.remove(); }, 400); }
