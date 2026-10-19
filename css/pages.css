@@ -169,3 +169,4 @@ h1{font-size:clamp(32px,4.2vw,54px);line-height:1.06;font-weight:700}
 .stars{color:#F5B301;letter-spacing:1px}
 @media (min-width:1220px) and (max-width:1400px){.hd-r .live{display:none}.hd-nav{gap:18px}.hd-in{gap:20px}}
 .sec-rev.sec-short{padding-bottom:0}.sec-rev.sec-short .rev-head{margin-bottom:0}
+.trips{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;margin:8px 0 6px}.trip{margin:0}.trip img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;background:#E3E6EB}.trip figcaption{margin-top:9px;font-size:15px;line-height:1.45;color:#3B4150}
