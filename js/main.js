@@ -116,6 +116,7 @@ class Component extends DCLogic {
   }
   openFlow = (patch) => {
     const st = this.state;
+    if (window.vslGoal) window.vslGoal('form_start', true);
     if (!patch && st.fstep > 1 && st.fstep < 6) return this.setState({ flowOpen: true, fResume: true, menuOpen: false });
     const next = Object.assign({ flowOpen: true, fResume: false, fForm: false, sent: false, menuOpen: false }, patch || {});
     const from = (next.from !== undefined ? next.from : st.from).trim();
@@ -180,7 +181,7 @@ class Component extends DCLogic {
       fBarNext: !res && fs <= 4, fBarResult: !res && fs === 5 && !st.fForm, fBarForm: !res && fs === 5 && st.fForm, fBarDone: !res && fs === 6, fBarResume: res,
       fBackLabel: (res || fs === 1 || fs === 6) ? 'На сайт' : 'Назад', fEtaShort: String(this.result().eta).replace('≈', ''),
       fNextLabel: fs === 4 ? 'Рассчитать вызов' : 'Продолжить', fNextDisabled: dis, fNextBg: dis ? '#A9B9F2' : '#2350E6',
-      fNext: () => { if (dis) return; this.setState({ fstep: fs === 1 ? 2 : fs === 2 ? after2 : fs === 3 ? 4 : 5 }); },
+      fNext: () => { if (dis) return; const n = fs === 1 ? 2 : fs === 2 ? after2 : fs === 3 ? 4 : 5; this.setState({ fstep: n }); if (n === 5 && window.vslGoal) window.vslGoal('calc_result'); },
       fBack: () => { if (res || fs === 1) return this.setState({ flowOpen: false, fResume: false }); if (fs === 6) return this.setState(Object.assign({}, this.resetFlow, { flowOpen: false })); if (fs === 5 && st.fForm) return this.setState({ fForm: false }); this.setState({ fstep: fs === 4 && st.sit && st.sitPre ? 2 : fs - 1 }); },
       fClose: () => this.setState({ flowOpen: false, fResume: false }),
       fContinue: set({ fResume: false }),
@@ -257,7 +258,7 @@ class Component extends DCLogic {
       canBack: st.step > 1, back: () => this.setState({ step: st.step === 4 && st.sit && st.sitPre ? 2 : Math.max(1, st.step - 1), sent: false }),
       stepLabel: st.step < 5 ? 'Шаг ' + st.step + ' из 4' : 'Результат',
       progress: [1, 2, 3, 4].map(i => ({ c: i <= st.step ? '#2350E6' : '#E3E6EB' })),
-      next: () => this.setState({ step: Math.min(5, st.step + (st.step === 2 && st.sit ? 2 : 1)) }),
+      next: () => { const n = Math.min(5, st.step + (st.step === 2 && st.sit ? 2 : 1)); this.setState({ step: n }); if (window.vslGoal) { window.vslGoal('form_start', true); if (n === 5) window.vslGoal('calc_result'); } },
       hasFrom: !!st.from.trim(), noFrom: !st.from.trim(), nextBg: st.from.trim() ? '#2350E6' : '#A9B9F2',
       eta: this.eta(),
       fromChips: ['На КАД', 'На ЗСД', 'Ленобласть', 'Трасса М-10 / М-11'].map(t => ({ t, pick: set({ from: t + ', ' }) })),

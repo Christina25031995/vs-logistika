@@ -18,15 +18,34 @@
     window.ym(Number(METRIKA_ID), 'init', { ssr:true, clickmap:true, referrer:document.referrer, url:location.href, accurateTrackBounce:true, trackLinks:true });
   }
   /* цели: только при согласии и загруженной Метрике */
-  function goal(name){ try { if (metrikaLoaded && window.ym) window.ym(Number(METRIKA_ID), 'reachGoal', name); } catch(e){} }
+  /* Система целей (19.10.2026): обращения (+ общая цель contact), намерение, вовлечённость — см. журнал клиента */
+  var CONTACT = { call:1, whatsapp:1, telegram:1, max:1, email:1, lead:1 };
+  var once = {};
+  function send(name){ try { if (metrikaLoaded && window.ym) window.ym(Number(METRIKA_ID), 'reachGoal', name); } catch(e){} }
+  function goal(name, onlyOnce){
+    if (onlyOnce) { if (once[name]) return; once[name] = 1; }
+    send(name); if (CONTACT[name]) send('contact');
+  }
   window.vslGoal = goal;
   document.addEventListener('click', function(e){
-    var a = e.target.closest && e.target.closest('a[href]'); if (!a) return;
-    var h = a.getAttribute('href') || '';
-    if (/^tel:/.test(h)) goal('call');
-    else if (/wa\.me\//.test(h)) goal('whatsapp');
-    else if (/t\.me\//.test(h)) goal('telegram');
-    else if (/max\.ru\//.test(h)) goal('max');
+    var t = e.target;
+    var a = t.closest && t.closest('a[href]');
+    if (a) {
+      var h = a.getAttribute('href') || '';
+      if (/^tel:/.test(h)) goal('call');
+      else if (/wa\.me\//.test(h)) goal('whatsapp');
+      else if (/t\.me\//.test(h)) goal('telegram');
+      else if (/max\.ru\//.test(h)) goal('max');
+      else if (/^mailto:/.test(h)) goal('email');
+      else if (/yandex\.[a-z]+\/maps\/org\//.test(h)) goal('reviews');
+    }
+    var b = t.closest && t.closest('button, [role=button]');
+    if (b && (/Определить/.test(b.textContent || '') || b.classList.contains('vsc-geo'))) goal('geo');
+    if (t.closest && t.closest('[data-vs-calc]')) goal('calc_use', true);
+  }, true);
+  document.addEventListener('input', function(e){ if (e.target.closest && e.target.closest('[data-vs-calc]')) goal('calc_use', true); }, true);
+  document.addEventListener('copy', function(){
+    try { var d = String(window.getSelection()).replace(/\D/g, ''); if (/9110700|9052131033/.test(d)) goal('phone_copy'); } catch(e){}
   }, true);
   var bar = null;
   function hide(){ if (!bar) return; bar.classList.remove('is-in'); var b = bar; bar = null; setTimeout(function(){ b.remove(); }, 400); }
