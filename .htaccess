@@ -6,3 +6,6 @@ RewriteRule ^(.*)$ https://vs-evakuator.ru/$1 [R=301,L]
 RewriteCond %{THE_REQUEST} \s/+index\.html[\s?]
 RewriteRule ^index\.html$ https://vs-evakuator.ru/ [R=301,L]
 </IfModule>
+
+# Своя страница 404 (22.10.2026): отдаёт код 404, в дизайне сайта, noindex
+ErrorDocument 404 /404.html
