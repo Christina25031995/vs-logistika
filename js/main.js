@@ -99,7 +99,7 @@ class Component extends DCLogic {
     window.addEventListener('load', this.onResize);
     if (window.ResizeObserver) { this.ro = new ResizeObserver(() => { if (VW() !== this.state.w) this.setState({ w: VW() }); }); this.ro.observe(document.documentElement); }
     window.addEventListener('resize', this.onResize);
-    this.onMsg = e => { const m = e.data || {}; if (m.type !== 'vsl-map' || m.action !== 'call') return; if (this.state.w < 820) return this.openFlow({ from: m.district ? m.district + ' район' : this.state.from, fstep: 2 }); this.setState({ from: m.district ? m.district + ' район, ' : this.state.from, step: 1 }); this.scrollTo('calc'); };
+    this.onMsg = e => { const m = e.data || {}; if (m.type !== 'vsl-map' || m.action !== 'call') return; /* 24.10.2026 (Кристина): «Вызвать эвакуатор» на карте — сразу звонок, без анкеты */ try { if (window.vslGoal) window.vslGoal('call'); } catch (er) {} window.location.href = 'tel:+78129110700'; };
     window.addEventListener('message', this.onMsg);
   }
   componentWillUnmount() { window.removeEventListener('resize', this.onResize); window.removeEventListener('message', this.onMsg); window.removeEventListener('load', this.onResize); if (this.ro) this.ro.disconnect(); }
