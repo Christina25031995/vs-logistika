@@ -101,6 +101,8 @@ function select(d){
 }
 $('pX').onclick = () => { $('panel').classList.remove('on'); $('legend').style.visibility = ''; const p = cur; cur = null; if (p) refresh(p); };
 $('pCall').onclick = () => parent.postMessage({type:'vsl-map', action:'call', district:cur && cur.n}, '*');
+/* 26.10.2026: «Позвонить» в окне района звонит сам (tel:, target=_top), но Метрики в iframe нет — сообщаем родителю, чтобы засчитал цель call */
+document.querySelectorAll('.btns a[href^="tel:"]').forEach(el => el.addEventListener('click', () => parent.postMessage({type:'vsl-map', action:'call-goal', district:cur && cur.n}, '*')));
 
 let me = null, myRoute = null;
 window.addEventListener('message', e => {
