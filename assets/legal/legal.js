@@ -60,6 +60,8 @@
     requestAnimationFrame(function(){ requestAnimationFrame(function(){ bar && bar.classList.add('is-in'); }); });
   }
   document.addEventListener('click', function(e){ var a = e.target.closest && e.target.closest('[data-cookie-settings]'); if (!a) return; e.preventDefault(); show(); });
-  function start(){ var v = read(); if (v === 'all') loadMetrika(); else if (v !== 'necessary') setTimeout(show, 1200); }
+  /* 26.10.2026 (решение Кристины, временно, пока учится реклама): Метрика грузится сразу, без ожидания «Принять».
+     Не грузим только тем, кто раньше выбрал «Только необходимые». Чтобы вернуть как было: if (v === 'all') loadMetrika(); */
+  function start(){ var v = read(); if (v !== 'necessary') loadMetrika(); if (!v) setTimeout(show, 1200); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
